@@ -11,17 +11,71 @@
     "virtualNetworkName": {
       "value": "vnet"
     },
-    "dbSubnetName": {
+    "feSubnetName": {
       "value": "DMZ"
+    },
+    "dbSubnetName": {
+      "value": "Data"
+    },
+    "mysqlPassword": {
+      "value": "Almaviva1"
+    },
+    "vmName1": {
+      "value": "ActiveMQ1"
     },
     "vmIP1": {
       "value": "10.0.1.5"
     },
+    "vmName2": {
+      "value": "ActiveMQ2"
+    },
     "vmIP2": {
       "value": "10.0.1.6"
     },
+    "vmName3": {
+      "value": "ESB"
+    },
     "vmIP3": {
       "value": "10.0.1.7"
+    },
+    "vmName4": {
+      "value": "CEP"
+    },
+    "vmIP4": {
+      "value": "10.0.1.8"
+    },
+    "vmName5": {
+      "value": "IS"
+    },
+    "vmIP5": {
+      "value": "10.0.1.9"
+    },
+    "vmName6": {
+      "value": "MYSQL"
+    },
+    "vmIP6": {
+      "value": "10.0.2.10"
+    },
+    "vmName7": {
+      "value": "Elastic-Master"
+    },
+    "vmIP7": {
+      "value": "10.0.2.15"
+    },  
+   "vmName8": {
+      "value": "Elastic-Client"
+    },
+    "vmIP8": {
+      "value": "10.0.2.16"
+    },  
+    "vmName9": {
+      "value": "Elastic-Data"
+    },
+    "vmIP9": {
+      "value": "10.0.2.17"
+    },    
+    "DiskDataGB": {
+      "value": 10
     },
     "userName": {
       "value": "azureuser"
@@ -30,7 +84,7 @@
       "value": "Almaviva1"
     },
     "vmNamePrefix": {
-      "value": "VM-"
+      "value": "giotto"
     }
   }
 }

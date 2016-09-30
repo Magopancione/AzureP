@@ -73,7 +73,7 @@ now=$(date +"%Y%m%d")
 MASTERIP=""
 SUBNETADDRESS=""
 NODETYPE=""
-REPLICATORPASSWORD=""   # a capire come viene passata
+mysqlPassword=""  
 
 
 #Loop through options passed
@@ -90,7 +90,7 @@ while getopts :m:s:t:p: optname; do
       NODETYPE=${OPTARG}
       ;;
     p) #Replication Password
-      REPLICATORPASSWORD=${OPTARG}
+	  mysqlPassword=${OPTARG}
       ;;
     h)  #show help
       help
@@ -496,7 +496,30 @@ echo "* hard nproc 20000" >> /etc/security/limits.conf
 
 ######
 
+########### MYSQL Setup
 
+#no password prompt while installing mysql server
+#export DEBIAN_FRONTEND=noninteractive
+
+#another way of installing mysql server in a Non-Interactive mode
+echo "mysql-server-5.6 mysql-server/root_password password $mysqlPassword" | sudo debconf-set-selections 
+echo "mysql-server-5.6 mysql-server/root_password_again password $mysqlPassword" | sudo debconf-set-selections 
+
+#install mysql-server 5.6
+apt-get -y install mysql-server-5.6
+
+#set the password
+#sudo mysqladmin -u root password "$mysqlPassword"   #without -p means here the initial password is empty
+
+#alternative update mysql root password method
+#sudo mysql -u root -e "set password for 'root'@'localhost' = PASSWORD('$mysqlPassword')"
+#without -p here means the initial password is empty
+
+#sudo service mysql restart
+
+
+
+###########
 
 
 
@@ -572,7 +595,15 @@ setup_product() {
 	fi
 	logger "------Done configuring CEP -------"
 	
-	
+	    if [ "$NODETYPE" == "ESB" ];
+	then
+	 sysctl_install_IS_CEP_ESB
+	 limits_IS_CEP_ESB
+	 setup_ESB
+	 post_install_ESB
+	fi
+	logger "------Done configuring CEP -------"
+
 }
 
 
