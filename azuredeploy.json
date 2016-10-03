@@ -340,7 +340,7 @@
     },
     "sshNatRuleFrontEndPort1": {
       "type": "int",
-      "defaultValue": 443,
+      "defaultValue": 64001,
       "metadata": {
         "description": "public ssh port for VM1"
       }
@@ -436,11 +436,11 @@
         "description": "bash script command line for Elastic installation"
       }
     },
-    "LVMConfigFilePath": {
+    "GiottoConfigFilePath": {
       "type": "string",
       "defaultValue": "https://raw.githubusercontent.com/Magopancione/AzureP/master/configureLVM.sh",
       "metadata": {
-        "description": "configure LVM file location"
+        "description": "my.cnf file location"
       }
     }
   },
@@ -523,40 +523,40 @@
     "vhdContainer1": "[concat('http://',parameters('storageAccount'),'.blob.core.windows.net/vm1vhds/')]",
     "dataDisk1VhdName1": "[concat(variables('vhdContainer1'),parameters('vmName1'),'dataDisk1.vhd')]",
     "dataDisk2VhdName1": "[concat(variables('vhdContainer1'),parameters('vmName1'),'dataDisk2.vhd')]",
-    "customScriptParamVm1": ["-m NA -s NA -p NA -t ACTIVEMQ"],
+    "customScriptParamVm1": "[concat(parameters('vmIP1'), ' bootstrap-pxc ', parameters('GiottoConfigFilePath'))]",
     "vmExtensionName1": "[concat(parameters('vmName1'),'/', variables('vmExtensionName'))]",
     "vhdContainer2": "[concat('http://',parameters('storageAccount'),'.blob.core.windows.net/vm2vhds/')]",
     "dataDisk1VhdName2": "[concat(variables('vhdContainer2'),parameters('vmName2'),'dataDisk1.vhd')]",
     "dataDisk2VhdName2": "[concat(variables('vhdContainer2'),parameters('vmName2'),'dataDisk2.vhd')]",
-    "customScriptParamVm2": ["-m NA -s NA -p NA -t ACTIVEMQ"],
+    "customScriptParamVm2": "[concat(parameters('vmIP2'), ' start ', parameters('GiottoConfigFilePath'))]",
     "vhdContainer3": "[concat('http://',parameters('storageAccount'),'.blob.core.windows.net/vm3vhds/')]",
     "dataDisk1VhdName3": "[concat(variables('vhdContainer3'),parameters('vmName3'),'dataDisk1.vhd')]",
     "dataDisk2VhdName3": "[concat(variables('vhdContainer3'),parameters('vmName3'),'dataDisk2.vhd')]",
-    "customScriptParamVm3": "[concat(parameters('vmIP3'), ' start ', parameters('LVMConfigFilePath'))]",
+    "customScriptParamVm3": "[concat(parameters('vmIP3'), ' start ', parameters('GiottoConfigFilePath'))]",
     "vhdContainer4": "[concat('http://',parameters('storageAccount'),'.blob.core.windows.net/vm4vhds/')]",
     "dataDisk1VhdName4": "[concat(variables('vhdContainer4'),parameters('vmName4'),'dataDisk1.vhd')]",
     "dataDisk2VhdName4": "[concat(variables('vhdContainer4'),parameters('vmName4'),'dataDisk2.vhd')]",
-    "customScriptParamVm4": "[concat(parameters('vmIP4'), ' start ', parameters('LVMConfigFilePath'))]",
+    "customScriptParamVm4": "[concat(parameters('vmIP4'), ' start ', parameters('GiottoConfigFilePath'))]",
     "vhdContainer5": "[concat('http://',parameters('storageAccount'),'.blob.core.windows.net/vm5vhds/')]",
     "dataDisk1VhdName5": "[concat(variables('vhdContainer5'),parameters('vmName5'),'dataDisk1.vhd')]",
     "dataDisk2VhdName5": "[concat(variables('vhdContainer5'),parameters('vmName5'),'dataDisk2.vhd')]",
-    "customScriptParamVm5": "[concat(parameters('vmIP5'), ' start ', parameters('LVMConfigFilePath'))]",
+    "customScriptParamVm5": "[concat(parameters('vmIP5'), ' start ', parameters('GiottoConfigFilePath'))]",
     "vhdContainer6": "[concat('http://',parameters('storageAccount'),'.blob.core.windows.net/vm6vhds/')]",
     "dataDisk1VhdName6": "[concat(variables('vhdContainer6'),parameters('vmName6'),'dataDisk1.vhd')]",
     "dataDisk2VhdName6": "[concat(variables('vhdContainer6'),parameters('vmName6'),'dataDisk2.vhd')]",
-    "customScriptParamVm6": "[concat(parameters('vmIP6'), ' start ', parameters('LVMConfigFilePath'))]",
+    "customScriptParamVm6": "[concat(parameters('vmIP6'), ' start ', parameters('GiottoConfigFilePath'))]",
     "vhdContainer7": "[concat('http://',parameters('storageAccount'),'.blob.core.windows.net/vm7vhds/')]",
     "dataDisk1VhdName7": "[concat(variables('vhdContainer7'),parameters('vmName7'),'dataDisk1.vhd')]",
     "dataDisk2VhdName7": "[concat(variables('vhdContainer7'),parameters('vmName7'),'dataDisk2.vhd')]",
-    "customScriptParamVm7": "[concat(parameters('vmIP7'), ' start ', parameters('LVMConfigFilePath'))]",
+    "customScriptParamVm7": "[concat(parameters('vmIP7'), ' start ', parameters('GiottoConfigFilePath'))]",
     "vhdContainer8": "[concat('http://',parameters('storageAccount'),'.blob.core.windows.net/vm8vhds/')]",
     "dataDisk1VhdName8": "[concat(variables('vhdContainer8'),parameters('vmName8'),'dataDisk1.vhd')]",
     "dataDisk2VhdName8": "[concat(variables('vhdContainer8'),parameters('vmName8'),'dataDisk2.vhd')]",
-    "customScriptParamVm8": "[concat(parameters('vmIP8'), ' start ', parameters('LVMConfigFilePath'))]",
+    "customScriptParamVm8": "[concat(parameters('vmIP8'), ' start ', parameters('GiottoConfigFilePath'))]",
     "vhdContainer9": "[concat('http://',parameters('storageAccount'),'.blob.core.windows.net/vm9vhds/')]",
     "dataDisk1VhdName9": "[concat(variables('vhdContainer9'),parameters('vmName9'),'dataDisk1.vhd')]",
     "dataDisk2VhdName9": "[concat(variables('vhdContainer9'),parameters('vmName9'),'dataDisk2.vhd')]",
-    "customScriptParamVm9": "[concat(parameters('vmIP9'), ' start ', parameters('LVMConfigFilePath'))]"
+    "customScriptParamVm9": "[concat(parameters('vmIP9'), ' start ', parameters('GiottoConfigFilePath'))]"
   },
   "resources": [
     {
@@ -972,7 +972,7 @@
           ]
         },
         "protectedSettings": {
-          "commandToExecute": "[concat(variables('customScriptCommandCommon'), variables('customScriptParamVm1'))]"
+          "commandToExecute": "[concat(parameters('customScriptCommandToExecute'), '-m ', parameters('vmName1'), ' -s  NA -p  NA -t ACTIVEMQ')]"
         }
       }
     },
@@ -1063,7 +1063,7 @@
           ]
         },
         "protectedSettings": {
-          "commandToExecute": "[concat(variables('customScriptCommandCommon'), variables('customScriptParamVm2'))]"
+         "commandToExecute": "[concat(parameters('customScriptCommandToExecute'), '-m ', parameters('vmName2'), ' -s  NA -p  NA -t ACTIVEMQ')]"
         }
       }
     },
@@ -1154,7 +1154,7 @@
           ]
         },
         "protectedSettings": {
-          "commandToExecute": "[concat(variables('customScriptCommandCommon'), variables('customScriptParamVm3'))]"
+          "commandToExecute": "[concat(parameters('customScriptCommandToExecute'), '-m ', parameters('vmName3'), ' -s  NA -p  NA -t ACTIVEMQ')]"
         }
       }
     },
@@ -1245,7 +1245,7 @@
           ]
         },
         "protectedSettings": {
-          "commandToExecute": "[concat(variables('customScriptCommandCommon'), variables('customScriptParamVM4'))]"
+          "commandToExecute": "[concat(parameters('customScriptCommandToExecute'), '-m ', parameters('vmName4'), ' -s  NA -p  NA -t ACTIVEMQ')]"
         }
       }
     },
@@ -1336,7 +1336,7 @@
           ]
         },
         "protectedSettings": {
-          "commandToExecute": "[concat(variables('customScriptCommandCommon'), variables('customScriptParamVM5'))]"
+          "commandToExecute": "[concat(parameters('customScriptCommandToExecute'), '-m ', parameters('vmName5'), ' -s  NA -p  NA -t ACTIVEMQ')]"
         }
       }
     },
@@ -1427,7 +1427,7 @@
           ]
         },
         "protectedSettings": {
-          "commandToExecute": "[concat(variables('customScriptCommandCommon'), variables('customScriptParamVM6'))]"
+          "commandToExecute": "[concat(parameters('customScriptCommandToExecute'), '-m ', parameters('vmName6'), ' -s  NA -p  NA -t ACTIVEMQ')]"
         }
       }
     },
@@ -1518,7 +1518,7 @@
           ]
         },
         "protectedSettings": {
-          "commandToExecute": "[concat(variables('customScriptCommandCommon'), variables('customScriptParamVM7'))]"
+          "commandToExecute": "[concat(parameters('customScriptCommandToExecute'), '-m ', parameters('vmName7'), ' -s  NA -p  NA -t ACTIVEMQ')]"
         }
       }
     },
@@ -1609,7 +1609,7 @@
           ]
         },
         "protectedSettings": {
-          "commandToExecute": "[concat(variables('customScriptCommandCommon'), variables('customScriptParamVM8'))]"
+          "commandToExecute": "[concat(parameters('customScriptCommandToExecute'), '-m ', parameters('vmName8'), ' -s  NA -p  NA -t ACTIVEMQ')]"
         }
       }
     },
@@ -1700,7 +1700,7 @@
           ]
         },
         "protectedSettings": {
-          "commandToExecute": "[concat(variables('customScriptCommandCommon'), variables('customScriptParamVM9'))]"
+          "commandToExecute": "[concat(parameters('customScriptCommandToExecute'), '-m ', parameters('vmName9'), ' -s  NA -p  NA -t ACTIVEMQ')]"
         }
       }
     },
