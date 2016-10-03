@@ -149,13 +149,14 @@ setup_java_repo() {
 
 ######### Setup Disk OPT ###############
 setup_diskopt() {
-wget "https://raw.githubusercontent.com/Magopancione/AzureP/master/configureLVM.sh" -O /roo/configureLVM.sh
+wget "https://raw.githubusercontent.com/Magopancione/AzureP/master/configureLVM.sh" -O /root/configureLVM.sh
 bash configureLVM.sh -optluns 0,1
 }
 
 
 ######### Setup Disk OPT ###############
 setup_diskDB() {
+wget "https://raw.githubusercontent.com/Magopancione/AzureP/master/configureLVM.sh" -O /root/configureLVM.sh
 bash configureLVM.sh -dbluns 0,1
 }
 
