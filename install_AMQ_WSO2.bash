@@ -1,6 +1,5 @@
 #!/bin/bash
 
- exit 0
 
 # You must be root to run this script
 if [ "${UID}" -ne 0 ];
@@ -12,19 +11,25 @@ fi
 
 #Format the data disk
 #D bash vm-disk-utils-0.1.sh -s   # ci devo mettere qalcosa per partizionare il disco
+####   
+#DATA_DISKS="/datadisks"
+#DATA_MOUNTPOINT="$DATA_DISKS/disk1"
+#COUCHBASE_DATA="$DATA_MOUNTPOINT/couchbase"
+# Stripe all of the data disks
+#bash ./vm-disk-utils-0.1.sh -b $DATA_DISKS -s
 
 
 #### Defalt Paramenters ####
 
 # Configure java parameters
-export GET_JAVA_SITE="https:///sito"
-export GET_JAVA_FILE="jdk-7u75-linux-x64.tar.gz"
-export JAVA_TMP_PATH=/opt/jvm/jdk1.7.0_75
+export GET_JAVA_SITE="http://javadl.oracle.com/webapps/download/AutoDL?BundleId=211989"
+export GET_JAVA_FILE="jre-8u101-linux-x64.tar.gz"
+export JAVA_TMP_PATH="/opt/jre1.8.0_101"
 
 #  Configure ActiveMQ parameters
-export GET_ACTIVEMQ_SITE="https:///sito"
-export GET_ACTIVEMQ_FILE="file"
-export ACTIVEMQ_TMP_PATH="/opt/activemq"
+export GET_ACTIVEMQ_SITE="http://www.apache.org/dyn/closer.cgi?filename=/activemq/5.14.0/apache-activemq-5.14.0-bin.tar.gz&action=download"
+export GET_ACTIVEMQ_FILE="apache-activemq-5.14.0-bin.tar.gz"
+export ACTIVEMQ_TMP_PATH="/opt/apache-activemq-5.14.0"
 
 #  Configure Identity Server parameters
 export GET_IS_SITE="https:///sito"
@@ -78,7 +83,7 @@ mysqlPassword=""
 
 #Loop through options passed
 while getopts :m:s:t:p: optname; do
-    log "Option $optname set with value ${OPTARG}"
+    logger "Option $optname set with value ${OPTARG}"
   case $optname in
     m)
       MASTERIP=${OPTARG}
@@ -112,17 +117,13 @@ logger "NOW=$now MASTERIP=$MASTERIP SUBNETADDRESS=$SUBNETADDRESS NODETYPE=$NODET
 
 setup_java() {
 	logger "Start installing java..."
-	
-	mkdir -p $JAVA_TMP_PATH 
-	cd $JAVA_TMP_PATH 
-    wget  $GET_JAVA_SITE$GET_JAVA_FILE
+    cd /opt
+    wget  $GET_JAVA_SITE -O $GET_JAVA_FILE
+	tar xvfz $GET_JAVA_FILE 
 	ln -s $JAVA_TMP_PATH /opt/java
-    gzip -dc $GET_JAVA_FILE | tar xf -
-	
     #The jvm directory is used to organize all JDK/JVM versions in a single parent directory.	
-	echo "export JAVA_HOME="/opt/java"" >> ~/bashrc
-    echo "export PATH="$PATH:$JAVA_HOME/bin"" >> ~/bashrc
-	
+	echo "export JAVA_HOME="/opt/java"" >> /etc/profile
+    echo "export PATH="$PATH:$JAVA_HOME/bin"" >> /etc/profile
     logger "Done installing Java, javahome is: $JAVA_TMP_PATH linked in /opt/java"	
 }
 
@@ -146,7 +147,19 @@ setup_java_repo() {
 
 ######
 
+######### Setup Disk OPT ###############
+setup_diskopt() {
+wget "https://raw.githubusercontent.com/Magopancione/AzureP/master/configureLVM.sh" -O /roo/configureLVM.sh
+bash configureLVM.sh -optluns 0,1
+}
 
+
+######### Setup Disk OPT ###############
+setup_diskDB() {
+bash configureLVM.sh -dbluns 0,1
+}
+
+################## END ##################
 
 
 
@@ -155,36 +168,35 @@ setup_java_repo() {
 
 setup_activeMQ() {
 	logger "Start installing ActiveMQ..."
-	
-	mkdir -p $ACTIVEMQ_TMP_PATH 
-	cd $ACTIVEMQ_TMP_PATH 
-
-	wget $GET_ACTIVEMQ_TMP_PATH$GET_ACTIVEMQ_FILE
+	source  /etc/profile
+    cd /opt
+    wget  $GET_ACTIVEMQ_SITE -O $GET_ACTIVEMQ_FILE
 	tar xvfz $GET_ACTIVEMQ_FILE
+    ln -s $ACTIVEMQ_TMP_PATH /opt/ActiveMQ
 
-	
-	ln -s $ACTIVEMQ_TMP_PATH /opt/ActiveMQ
 	logger "Done installing ActiveMQ is installed in: $ACTIVEMQ_TMP_PATH  linked in /opt/ActiveMQ"	
 	
 	}
 	
 	
-post_install_activeMQ() {
-	cd 
- 
+post_install_activeMQ() { 
 	chmod 755 /opt/ActiveMQ/bin/activemq
     ln -snf /opt/ActiveMQ/bin/activemq /etc/init.d/activemq_service
-    update-rc.d is_service defaults
-	service activemq_service start
-	
-	
+    update-rc.d activemq_service defaults
+	echo -e "\nJAVA_HOME="/opt/java"" >> /opt/apache-activemq-5.14.0/bin/env
+    service activemq_service start
 }
 
 
 test_activeMQ() {
+sleep 20
 
-logger  netstat -an|grep 61616
+GET_STATE=$( netstat -an|grep 61616| wc -l )
 
+    if [ "$GET_STATE" == "1" ];
+	then
+	 logger " ------Done ActiveMQ is Running on port 61616 -------"   # per la cluster conviene usare puppet
+	fi
 #INFO  ActiveMQ JMS Message Broker (ID:apple-s-Computer.local-51222-1140729837569-0:0) has started
 
 }
@@ -325,7 +337,7 @@ service esb_service start
 ######   CEP STEPS
 
 setup_CEP() {
-	logger "Start installing Complex Event Processor..."
+	logger " Start installing Complex Event Processor..."
 	
 	mkdir -p $CEP_TMP_PATH 
 	cd $CEP_TMP_PATH 
@@ -336,7 +348,7 @@ setup_CEP() {
 	ln -s $CEP_TMP_PATH /opt/WSO2/cep
 
  
-    logger "Done installing WSO2 Complex Event Processor installed in: $CEP_TMP_PATH   linked in /opt/WSO2/cep"	
+    logger " Done installing WSO2 Complex Event Processor installed in: $CEP_TMP_PATH   linked in /opt/WSO2/cep"	
 	
 }
 
@@ -497,7 +509,7 @@ echo "* hard nproc 20000" >> /etc/security/limits.conf
 ######
 
 ########### MYSQL Setup
-
+setup_MYSQL() {
 #no password prompt while installing mysql server
 #export DEBIAN_FRONTEND=noninteractive
 
@@ -517,7 +529,7 @@ apt-get -y install mysql-server-5.6
 
 #sudo service mysql restart
 
-
+}
 
 ###########
 
@@ -551,58 +563,68 @@ setup_product() {
 
 	if [ "$NODETYPE" == "ACTIVEMQ" ];
 	then
-	 logger "------Start Install ActiveMQ------"
+	 logger " ------Start Install ActiveMQ------"
 	 #Impostazione base di sistema
+	 setup_diskopt
      limits_activeMQ
+	 setup_java
      sysctl_activeMQ
      
      #setup of ActiveMQ
      setup_activeMQ
-	 post_install_activeMQ
+	 post_install_activeMQ     
+	 #test of ActiveMQ
      test_activeMQ
+	logger " ------Done configuring ACTIVEMQ-------"
 	fi
-	logger "------Done configuring ACTIVEMQ-------"
+	
 	
 	
 	if [ "$NODETYPE" == "IS" ];
 	then
+	 setup_diskopt
+	 setup_java
 	 sysctl_install_IS_CEP_ESB
 	 limits_IS_CEP_ESB
 	 setup_IS
 	 post_install_IS
-	
+	logger " ------Done configuring IS-------"
 	fi
-	logger "------Done configuring IS-------"
+	
 
 	
 		
     if [ "$NODETYPE" == "CEP" ];
 	then
+	 setup_diskopt
+	 setup_java
 	 sysctl_install_IS_CEP_ESB
 	 limits_IS_CEP_ESB
 	 setup_CEP
 	 post_install_CEP
+	 logger " ------Done configuring CEP -------"   # per la cluster conviene usare puppet
 	fi
-	logger "------Done configuring CEP -------"   # per la cluster conviene usare puppet
+	
 	
 			
     if [ "$NODETYPE" == "ESB" ];
 	then
+	 setup_diskopt
+	 setup_java
 	 sysctl_install_IS_CEP_ESB
 	 limits_IS_CEP_ESB
 	 setup_ESB
 	 post_install_ESB
+	logger " ------Done configuring ESB -------"
 	fi
-	logger "------Done configuring CEP -------"
 	
-	    if [ "$NODETYPE" == "ESB" ];
+
+    if [ "$NODETYPE" == "MYSQL" ];
 	then
-	 sysctl_install_IS_CEP_ESB
-	 limits_IS_CEP_ESB
-	 setup_ESB
-	 post_install_ESB
+	 setup_diskDB
+	 setup_MYSQL
 	fi
-	logger "------Done configuring CEP -------"
+	logger " ------Done configuring CEP ------- "
 
 }
 
@@ -612,6 +634,6 @@ setup_product() {
 #aggiorna i repo
 apt-get -y update
 
-#Setup Java
-setup_java
+#Setup della JVM
+
 setup_product

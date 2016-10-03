@@ -1,13 +1,9 @@
 #!/bin/bash
-# create-mdadm <lun array> <mdadm path e.g. /dev/md127> <mount path e.g. /dbdata>
-# TODO: SWAP file
-# TODO: run /usr/sbin/SAPconf
-
 function log()
 {
 	message=$1
 	echo "$message"
-	echo "$message" >> /var/log/sapconfigcreate
+	echo "$message" >> /var/log/lv-create
 }
 
 function addtofstab()
@@ -83,10 +79,10 @@ function createlvm()
 			fi
 		done
 		log "num: $numRaidDevices paths: '$raidDevices'"
-		$(pvcreate $raidDevices)
-		$(vgcreate $vgName $raidDevices)
-		$(lvcreate --extents 100%FREE --stripes $numRaidDevices --name $lvName $vgName)
-		$(mkfs -t xfs /dev/$vgName/$lvName)
+		log $(pvcreate $raidDevices)
+		log $(vgcreate $vgName $raidDevices)
+		log $(lvcreate --extents 100%FREE --stripes $numRaidDevices --name $lvName $vgName)
+		log $(mkfs -t xfs /dev/$vgName/$lvName)
 
 		$(mkdir $mountPath)
 		addtofstab /dev/$vgName/$lvName		
@@ -116,20 +112,24 @@ function createlvm()
 
 }
 
+apt-get install -y xfsprogs lvm2 lsscsi
+#bash configureLVM.sh -dbluns 0,1
+#bash configureLVM.sh -optluns 0,1
+
 dbluns=""
-dbname="dbdata"
-logluns=""
-logname="dblog"
+dbname="DB"
+optluns=""
+optname="opt"
 
 while true; do
 	case "$1" in
-    "-DBLogLUNS")  logluns=$2;shift 2;
+    "-dbluns")  dbluns=$2;shift 2;
         ;;
-    "-DBDataLUNS")  dbluns=$2;shift 2;
+    "-optluns")  optluns=$2;shift 2;
 	        ;;
-	"-DBDataName")  dbname=$2;shift 2;
+	"-dbname")  dbname=$2;shift 2;
         ;;
-	"-DBLogName")  logname=$2;shift 2;
+	"-optname")  optname=$2;shift 2;
         ;;
     esac
 	if [[ -z "$1" ]]; then break; fi
@@ -140,7 +140,7 @@ then
 	createlvm $dbluns "vg-$dbname" "lv-$dbname" "/$dbname";
 fi
 
-if [[ -n "$logluns" ]];
+if [[ -n "$optluns" ]];
 then
-	createlvm $logluns "vg-$logname" "lv-$logname" "/$logname";
+	createlvm $optluns "vg-$optname" "lv-$optname" "/$optname";
 fi
