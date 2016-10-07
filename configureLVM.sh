@@ -137,10 +137,10 @@ done
 
 if [[ -n "$dbluns" ]];
 then
-	createlvm $dbluns "vg-$dbname" "lv-$dbname" "$dbname";
+	createlvm $dbluns "vg-$dbname" "lv-$dbname" "$/dbname";
 fi
 
 if [[ -n "$optluns" ]];
 then
-	createlvm $optluns "vg-$optname" "lv-$optname" "$optname";
+	createlvm $optluns "vg-$optname" "lv-$optname" "/$optname";
 fi
