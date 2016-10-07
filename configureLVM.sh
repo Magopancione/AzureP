@@ -117,9 +117,9 @@ apt-get install -y xfsprogs lvm2 lsscsi
 #bash configureLVM.sh -optluns 0,1
 
 dbluns=""
-dbname="/var/lib/mysql"
+dbname="mysql-DB"
 optluns=""
-optname="/opt"
+optname="opt"
 
 while true; do
 	case "$1" in

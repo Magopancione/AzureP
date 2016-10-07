@@ -340,7 +340,7 @@
     },
     "sshNatRuleFrontEndPort1": {
       "type": "int",
-      "defaultValue": 64001,
+      "defaultValue": 443,
       "metadata": {
         "description": "public ssh port for VM1"
       }
@@ -523,6 +523,15 @@
     "vhdContainer1": "[concat('http://',parameters('storageAccount'),'.blob.core.windows.net/vm1vhds/')]",
     "dataDisk1VhdName1": "[concat(variables('vhdContainer1'),parameters('vmName1'),'dataDisk1.vhd')]",
     "dataDisk2VhdName1": "[concat(variables('vhdContainer1'),parameters('vmName1'),'dataDisk2.vhd')]",
+    "executeParamVm1":  "[concat(parameters('customScriptCommandToExecute'), ' -m Q1 -s  NA -p  NA -t ACTIVEMQ')]",
+	"executeParamVm2":  "[concat(parameters('customScriptCommandToExecute'), ' -m Q2 -s  NA -p  NA -t ACTIVEMQ')]",
+	"executeParamVm3":  "[concat(parameters('customScriptCommandToExecute'), ' -m Q3 -s  NA -p  NA -t ESB')]",
+	"executeParamVm4":  "[concat(parameters('customScriptCommandToExecute'), ' -m Q4 -s  NA -p  NA -t CEP')]",
+	"executeParamVm5":  "[concat(parameters('customScriptCommandToExecute'), ' -m Q5 -s  NA -p  NA -t IS')]",
+	"executeParamVm6":  "[concat(parameters('customScriptCommandToExecute'), ' -m Q6 -s  NA -p  NA -t MYSQL')]",
+	"executeParamVm7":  "[concat(parameters('customScriptCommandToExecute'), ' -m Q7 -s  NA -p  NA -t MYSQL')]",
+	"executeParamVm8":  "[concat(parameters('customScriptCommandToExecute'), ' -m Q8 -s  NA -p  NA -t MYSQL')]",
+	"executeParamVm9":  "[concat(parameters('customScriptCommandToExecute'), ' -m Q9 -s  NA -p  NA -t MYSQL')]",
     "customScriptParamVm1": "[concat(parameters('vmIP1'), ' bootstrap-pxc ', parameters('GiottoConfigFilePath'))]",
     "vmExtensionName1": "[concat(parameters('vmName1'),'/', variables('vmExtensionName'))]",
     "vhdContainer2": "[concat('http://',parameters('storageAccount'),'.blob.core.windows.net/vm2vhds/')]",
@@ -972,7 +981,7 @@
           ]
         },
         "protectedSettings": {
-          "commandToExecute": "[concat(parameters('customScriptCommandToExecute'), '-m ', parameters('vmName1'), ' -s  NA -p  NA -t ACTIVEMQ')]"
+          "commandToExecute": "[variables('executeParamVm1')]"
         }
       }
     },
@@ -1063,7 +1072,7 @@
           ]
         },
         "protectedSettings": {
-         "commandToExecute": "[concat(parameters('customScriptCommandToExecute'), '-m ', parameters('vmName2'), ' -s  NA -p  NA -t ACTIVEMQ')]"
+                "commandToExecute": "[variables('executeParamVm2')]"
         }
       }
     },
@@ -1154,7 +1163,7 @@
           ]
         },
         "protectedSettings": {
-          "commandToExecute": "[concat(parameters('customScriptCommandToExecute'), '-m ', parameters('vmName3'), ' -s  NA -p  NA -t ACTIVEMQ')]"
+          "commandToExecute": "[concat(parameters('customScriptCommandToExecute'), ' -m NA -s  NA -p  NA -t ACTIVEMQ')]"
         }
       }
     },
@@ -1245,7 +1254,7 @@
           ]
         },
         "protectedSettings": {
-          "commandToExecute": "[concat(parameters('customScriptCommandToExecute'), '-m ', parameters('vmName4'), ' -s  NA -p  NA -t ACTIVEMQ')]"
+                  "commandToExecute": "[variables('executeParamVm4')]"
         }
       }
     },
@@ -1336,7 +1345,7 @@
           ]
         },
         "protectedSettings": {
-          "commandToExecute": "[concat(parameters('customScriptCommandToExecute'), '-m ', parameters('vmName5'), ' -s  NA -p  NA -t ACTIVEMQ')]"
+                  "commandToExecute": "[variables('executeParamVm5')]"
         }
       }
     },
@@ -1427,7 +1436,7 @@
           ]
         },
         "protectedSettings": {
-          "commandToExecute": "[concat(parameters('customScriptCommandToExecute'), '-m ', parameters('vmName6'), ' -s  NA -p  NA -t ACTIVEMQ')]"
+                  "commandToExecute": "[variables('executeParamVm6')]"
         }
       }
     },
@@ -1518,7 +1527,7 @@
           ]
         },
         "protectedSettings": {
-          "commandToExecute": "[concat(parameters('customScriptCommandToExecute'), '-m ', parameters('vmName7'), ' -s  NA -p  NA -t ACTIVEMQ')]"
+                  "commandToExecute": "[variables('executeParamVm7')]"
         }
       }
     },
@@ -1609,7 +1618,7 @@
           ]
         },
         "protectedSettings": {
-          "commandToExecute": "[concat(parameters('customScriptCommandToExecute'), '-m ', parameters('vmName8'), ' -s  NA -p  NA -t ACTIVEMQ')]"
+                 "commandToExecute": "[variables('executeParamVm8')]"
         }
       }
     },
@@ -1700,7 +1709,7 @@
           ]
         },
         "protectedSettings": {
-          "commandToExecute": "[concat(parameters('customScriptCommandToExecute'), '-m ', parameters('vmName9'), ' -s  NA -p  NA -t ACTIVEMQ')]"
+                  "commandToExecute": "[variables('executeParamVm9')]"
         }
       }
     },

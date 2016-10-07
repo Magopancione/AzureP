@@ -275,10 +275,8 @@ setup_ESB() {
 	apt-get install unzip -y
 	mkdir -p $ESB_TMP_PATH 
 	cd $ESB_TMP_PATH 
-
-	wget $GET_ESB_TMP_PATH$GET_IS_FILE
+   wget  $GET_ESB_TMP_PATH -O $GET_IS_FILE 
 	unzip $GET_ESB_FILE
-
 	ln -s $ESB_TMP_PATH /opt/WSO2/esb
 
  
@@ -344,11 +342,13 @@ service esb_service start
 setup_CEP() {
 	logger " Start installing Complex Event Processor..."
 	apt-get install unzip -y
+	wget $GET_CET_TMP_PATH$GET_IS_FILE
+	unzip $GET_CEP_FILE
 	mkdir -p $CEP_TMP_PATH 
 	cd $CEP_TMP_PATH 
 
-	wget $GET_CET_TMP_PATH$GET_IS_FILE
-	unzip $GET_CEP_FILE
+	
+	
 
 	ln -s $CEP_TMP_PATH /opt/WSO2/cep
 
