@@ -26,29 +26,29 @@ export GET_JAVA_FILE="jre-8u101-linux-x64.tar.gz"
 export JAVA_TMP_PATH="/opt/jre1.8.0_101"
 
 #  Configure ActiveMQ parameters
-export GET_ACTIVEMQ_SITE="http://www.apache.org/dyn/closer.cgi?filename=/activemq/5.14.0/apache-activemq-5.14.0-bin.tar.gz&action=download"
-export GET_ACTIVEMQ_FILE="apache-activemq-5.14.0-bin.tar.gz"
-export ACTIVEMQ_TMP_PATH="/opt/apache-activemq-5.14.0"
+export GET_ACTIVEMQ_SITE="https://www.dropbox.com/s/azyqzj3hez84rq1/apache-activemq-5.9.0-bin.tar.gz?dl=0"
+export GET_ACTIVEMQ_FILE="apache-activemq-5.9.0-bin.tar.gz"
+export ACTIVEMQ_TMP_PATH="/opt/apache-activemq-5.9.0"
 
 #  Configure Identity Server parameters
-export GET_IS_SITE="https:///sito"
-export GET_IS_FILE="file.tra.gz"
-export IS_TMP_PATH="/opt/identityserver"
-export IS_USER="ident_usr"
+export GET_IS_SITE="https://www.dropbox.com/s/l8bb5e0nuv4sfe4/wso2is-5.2.0.zip?dl=0"
+export GET_IS_FILE="wso2is-5.2.0.zip"
+export IS_TMP_PATH="/opt/wso2is-5.2.0"
+export IS_USER="wso2_is"
 
 
 #  Configure Complex Event Processor parameters
-export GET_CEP_SITE="https:///sito"
-export GET_CEP_FILE="file.tra.gz"
-export CEP_TMP_PATH="/opt/identityserver"
-export CEP_USER="ident_usr"
+export GET_CEP_SITE="https://www.dropbox.com/s/fyj53zufqdvxtsw/wso2cep-4.2.0.zip?dl=0"
+export GET_CEP_FILE="wso2cep-4.2.0.zip"
+export CEP_TMP_PATH="/opt/wso2cep-4.2.0"
+export CEP_USER="wso2_cep"
 
 
-#  Configure Comple Event Processor parameters
-export GET_ESB_SITE="https:///sito"
-export GET_ESB_FILE="file.tra.gz"
-export ESB_TMP_PATH="/opt/identityserver"
-export ESB_USER="ident_usr"
+#  Configure ESB parameters
+export GET_ESB_SITE="https://www.dropbox.com/s/guz2fheobgbyxye/wso2esb-5.0.0.zip?dl=0"
+export GET_ESB_FILE="wso2esb-5.0.0.zip"
+export ESB_TMP_PATH="/opt/wso2esb-5.0.0"
+export ESB_USER="wso2_esb"
 
 
 #############################
@@ -155,6 +155,11 @@ bash configureLVM.sh -optluns 0,1
 
 ######### Setup Disk OPT ###############
 setup_diskDB() {
+
+#Disable Apparmor	
+/etc/init.d/apparmor teardown
+update-rc.d -f apparmor remove
+#Create Data
 wget "https://raw.githubusercontent.com/Magopancione/AzureP/master/configureLVM.sh" -O configureLVM.sh
 bash configureLVM.sh -dbluns 0,1
 }
@@ -267,12 +272,12 @@ echo "net.ipv4.tcp_wmem = 4096 4096 16777216       " >> /etc/sysctl.conf
 
 setup_ESB() {
 	logger "Start installing Enterpris Service Bus..."
-	
+	apt-get install unzip -y
 	mkdir -p $ESB_TMP_PATH 
 	cd $ESB_TMP_PATH 
 
 	wget $GET_ESB_TMP_PATH$GET_IS_FILE
-	tar xvfz $GET_ESB_FILE
+	unzip $GET_ESB_FILE
 
 	ln -s $ESB_TMP_PATH /opt/WSO2/esb
 
@@ -338,12 +343,12 @@ service esb_service start
 
 setup_CEP() {
 	logger " Start installing Complex Event Processor..."
-	
+	apt-get install unzip -y
 	mkdir -p $CEP_TMP_PATH 
 	cd $CEP_TMP_PATH 
 
 	wget $GET_CET_TMP_PATH$GET_IS_FILE
-	tar xvfz $GET_CEP_FILE
+	unzip $GET_CEP_FILE
 
 	ln -s $CEP_TMP_PATH /opt/WSO2/cep
 
@@ -413,12 +418,12 @@ service cep_service start
 
 setup_IS() {
 	logger "Start installing java..."
-	
+	apt-get install unzip -y
 	mkdir -p $IS_TMP_PATH 
 	cd $IS_TMP_PATH 
 
 	wget $GET_IS_TMP_PATH$GET_IS_FILE
-	tar xvfz $GET_IS_FILE
+	unzip $GET_IS_FILE
 
 	
 	ln -s $IS_TMP_PATH /opt/WSO2/IdentityServer
