@@ -273,13 +273,11 @@ echo "net.ipv4.tcp_wmem = 4096 4096 16777216       " >> /etc/sysctl.conf
 setup_ESB() {
 	logger "Start installing Enterpris Service Bus..."
 	apt-get install unzip -y
-	mkdir -p $ESB_TMP_PATH 
-	cd $ESB_TMP_PATH 
-   wget  $GET_ESB_TMP_PATH -O $GET_IS_FILE 
+	mkdir -p /opt/WSO2/
+	cd /opt/
+    wget  $GET_ESB_SITE -O $GET_ESB_FILE 
 	unzip $GET_ESB_FILE
 	ln -s $ESB_TMP_PATH /opt/WSO2/esb
-
- 
     logger "Done installing Enterpris Service Bus installed in: $ESB_TMP_PATH   linked in /opt/WSO2/esb "	
 	
 }
@@ -342,14 +340,10 @@ service esb_service start
 setup_CEP() {
 	logger " Start installing Complex Event Processor..."
 	apt-get install unzip -y
-	wget $GET_CET_TMP_PATH$GET_IS_FILE
+	mkdir -p /opt/WSO2/
+	cd /opt/
+    wget  $GET_CEP_SITE -O $GET_CEP_FILE 
 	unzip $GET_CEP_FILE
-	mkdir -p $CEP_TMP_PATH 
-	cd $CEP_TMP_PATH 
-
-	
-	
-
 	ln -s $CEP_TMP_PATH /opt/WSO2/cep
 
  
@@ -418,16 +412,15 @@ service cep_service start
 
 setup_IS() {
 	logger "Start installing java..."
+
+
+
 	apt-get install unzip -y
-	mkdir -p $IS_TMP_PATH 
-	cd $IS_TMP_PATH 
-
-	wget $GET_IS_TMP_PATH$GET_IS_FILE
+	mkdir -p /opt/WSO2/
+	cd /opt/
+    wget  $GET_IS_SITE -O $GET_IS_FILE 
 	unzip $GET_IS_FILE
-
-	
 	ln -s $IS_TMP_PATH /opt/WSO2/IdentityServer
-
  
     logger "Done installing Identiy Server installed in: $IS_TMP_PATH  linked in /opt/WSO2/IdentityServer"
 	
