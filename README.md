@@ -6,4 +6,11 @@
 </a>
 
 This template lets you create a 9 node on Azure.  It's tested on Ubuntu 14.04 LTS  
+
+Download Evinronment Deploy script
  
+To run this script: 
+ 
+Login-AzureRmAccount
+
+.\Deploy-AzureResourceGroup.ps1 -ResourceGroupLocation 'eastus' -ArtifactStagingDirectory 'ClusteringGiotto'

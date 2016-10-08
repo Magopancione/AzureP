@@ -1163,7 +1163,7 @@
           ]
         },
         "protectedSettings": {
-          "commandToExecute": "[concat(parameters('customScriptCommandToExecute'), ' -m NA -s  NA -p  NA -t ACTIVEMQ')]"
+                   "commandToExecute": "[variables('executeParamVm3')]"
         }
       }
     },
