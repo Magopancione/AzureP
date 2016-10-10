@@ -577,7 +577,7 @@ echo "* hard nproc 20000" >> /etc/security/limits.conf
 
 
 ######
-crea_uenti_mysql(){
+crea_utenti_mysql(){
 MYSQL=$(which mysql)
 Q1="CREATE DATABASE IF NOT EXISTS $DB1;"
 Q2="GRANT USAGE ON *.* TO $USER2@'%' IDENTIFIED BY '$PASS3';"
@@ -734,10 +734,10 @@ setup_product() {
 	then
 	 setup_diskDB
 	 setup_MYSQL
-	 $DB1=cep_db
-     $USER2=cep_user
-     $PASS3=cep_password
-     crea_uenti_mysql()
+	 #$DB1=cep_db
+     #$USER2=cep_user
+     #$PASS3=cep_password
+     #crea_utenti_mysql()
 	fi
 	logger " ------Done configuring CEP ------- "
 
