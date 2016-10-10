@@ -1,5 +1,5 @@
 #!/bin/bash
-exit 0
+
 # You must be root to run this script
 if [ "${UID}" -ne 0 ];
 then
