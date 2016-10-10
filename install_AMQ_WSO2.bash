@@ -605,22 +605,24 @@ echo "  bind-address            = 0.0.0.0 " >> /etc/mysql/conf.d/wso2.cnf
 
 
 sleep 10
-
+export DB1=""
+export USER2=""
+export PASS3=""
 
 #DB CEP
-export DB1=cep_db
-export SER2=cep_user
-export PASS3=cep_password
+$DB1=cep_db
+$USER2=cep_user
+$PASS3=cep_password
 crea_uenti_mysql()
 #DB ESB
-export DB1=esb_db
-export USER2=esb_user
-export PASS3=esb_password
+$DB1=esb_db
+$USER2=esb_user
+$PASS3=esb_password
 crea_uenti_mysql()
 #DB IS
-export DB1=is_db
-export USER2=is_user
-export PASS3=is_password
+$DB1=is_db
+$USER2=is_user
+$PASS3=is_password
 crea_uenti_mysql()
 
 
