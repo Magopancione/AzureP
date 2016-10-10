@@ -53,8 +53,14 @@ export GET_ESB_FILE="wso2esb-5.0.0.zip"
 export ESB_TMP_PATH="/opt/wso2esb-5.0.0"
 export ESB_USER="wso2_esb"
 
+
+export DB1=""
+export USER2=""
+export PASS3=""
+
 export GET_MYSQL_CONNECTOR="https://www.dropbox.com/s/a9qj46qwlbxsek6/mysql-connector-java-5.1.40-bin.jar?dl=0"
 export GET_DATASOURCETEMPLATE_CONNECTOR="https://www.dropbox.com/s/uemt6tm31axs7lp/master-datasources.xml?dl=0"
+
 
 
 #DB CEP
@@ -605,9 +611,7 @@ echo "  bind-address            = 0.0.0.0 " >> /etc/mysql/conf.d/wso2.cnf
 
 
 sleep 10
-export DB1=""
-export USER2=""
-export PASS3=""
+
 
 #DB CEP
 $DB1=cep_db
