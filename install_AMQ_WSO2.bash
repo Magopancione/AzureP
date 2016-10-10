@@ -20,6 +20,8 @@ fi
 
 #### Defalt Paramenters ####
 
+#Define Mysql Password
+
 # Configure java parameters
 export GET_JAVA_SITE="http://javadl.oracle.com/webapps/download/AutoDL?BundleId=211989"
 export GET_JAVA_FILE="jre-8u101-linux-x64.tar.gz"
@@ -29,6 +31,7 @@ export JAVA_TMP_PATH="/opt/jre1.8.0_101"
 export GET_ACTIVEMQ_SITE="https://www.dropbox.com/s/azyqzj3hez84rq1/apache-activemq-5.9.0-bin.tar.gz?dl=0"
 export GET_ACTIVEMQ_FILE="apache-activemq-5.9.0-bin.tar.gz"
 export ACTIVEMQ_TMP_PATH="/opt/apache-activemq-5.9.0"
+export AMQ_USER="actuve_user"
 
 #  Configure Identity Server parameters
 export GET_IS_SITE="https://www.dropbox.com/s/l8bb5e0nuv4sfe4/wso2is-5.2.0.zip?dl=0"
@@ -49,6 +52,23 @@ export GET_ESB_SITE="https://www.dropbox.com/s/guz2fheobgbyxye/wso2esb-5.0.0.zip
 export GET_ESB_FILE="wso2esb-5.0.0.zip"
 export ESB_TMP_PATH="/opt/wso2esb-5.0.0"
 export ESB_USER="wso2_esb"
+
+export GET_MYSQL_CONNECTOR="https://www.dropbox.com/s/a9qj46qwlbxsek6/mysql-connector-java-5.1.40-bin.jar?dl=0"
+export GET_DATASOURCETEMPLATE_CONNECTOR="https://www.dropbox.com/s/uemt6tm31axs7lp/master-datasources.xml?dl=0"
+
+
+#DB CEP
+DBCEP=cep_db
+DBUSERCEP=cep_user
+DBPASSCEP=cep_password
+#DB ESB
+DBESB=esb_db
+DBUSERESB=esb_user
+DBPASSESB=esb_password
+#DB IS
+DBIS=is_db
+DBUSERIS=is_user
+DBPASSIS=is_password
 
 
 #############################
@@ -185,10 +205,14 @@ setup_activeMQ() {
 	
 	
 post_install_activeMQ() { 
+
+groupadd -g 1070 $AMQ_USER
+useradd -u 1070 -g 1010 $AMQ_USER
 	chmod 755 /opt/ActiveMQ/bin/activemq
     ln -snf /opt/ActiveMQ/bin/activemq /etc/init.d/activemq_service
     update-rc.d activemq_service defaults
-	echo -e "\nJAVA_HOME="/opt/java"" >> /etc/default/activemq 
+	chown -R $AMQ_USER:$AMQ_USER /opt
+	echo -e "ACTIVEMQ_USER=$AMQ_USER\nJAVA_HOME="/opt/java"" >> /etc/default/activemq 
     service activemq_service start
 }
 
@@ -278,6 +302,17 @@ setup_ESB() {
     wget  $GET_ESB_SITE -O $GET_ESB_FILE 
 	unzip $GET_ESB_FILE
 	ln -s $ESB_TMP_PATH /opt/WSO2/esb
+	cd /opt/WSO2/esb/repository/components/lib
+    
+	#procedura Mysql
+	wget $GET_MYSQL_CONNECTOR -O /opt/WSO2/esb/repository/components/lib/mysql-connector-java-5.1.40-bin.jar
+    wget $GET_DATASOURCETEMPLATE_CONNECTOR  -O  /opt/WSO2/esb/repository/conf/datasources/master-datasources.xml 
+    sed -e "s/XX_IP_XX/10.0.2.10/g"  -i /opt/WSO2/esb/repository/conf/datasources/master-datasources.xml 
+	sed -e "s/XX_DB_XX/$DBESB/g" -i   /opt/WSO2/esb/repository/conf/datasources/master-datasources.xml 
+    sed -e "s/XX_USER_XX/$DBUSERESB/g" -i  /opt/WSO2/esb/repository/conf/datasources/master-datasources.xml 
+    sed -e "s/XX_PASSWORD_XX/$DBPASSESB/g"  -i  /opt/WSO2/esb/repository/conf/datasources/master-datasources.xml 
+
+	chown -R  $ESB_USER:$ESB_USER /opt
     logger "Done installing Enterpris Service Bus installed in: $ESB_TMP_PATH   linked in /opt/WSO2/esb "	
 	
 }
@@ -308,7 +343,7 @@ echo "case \"\$1\" in                                                           
 echo "start)                                                                     " >> /opt/WSO2/esb/esb_service
 echo "   echo \"Starting WSO2 Application Server ...\"                             " >> /opt/WSO2/esb/esb_service
 echo "   su -c \"\${startcmd}\" $ESB_USER                                           " >> /opt/WSO2/esb/esb_service
-echo ";;                                                                         " >> /opt/WSO2/esb/esb_service
+echo ";;                                                                         " >> /opt/cdWSO2/esb/esb_service
 echo "restart)                                                                   " >> /opt/WSO2/esb/esb_service
 echo "   echo \"Re-starting WSO2 Application Server ...\"                          " >> /opt/WSO2/esb/esb_service
 echo "   su -c \"\${restartcmd}\" $ESB_USER                                         " >> /opt/WSO2/esb/esb_service
@@ -328,8 +363,6 @@ echo "esac                                                                      
 chmod a+x /opt/WSO2/esb/esb_service
 ln -snf /opt/WSO2/esb/esb_service /etc/init.d/esb_service
 update-rc.d esb_service defaults
-
-
 service esb_service start
 }
 
@@ -343,8 +376,21 @@ setup_CEP() {
 	mkdir -p /opt/WSO2/
 	cd /opt/
     wget  $GET_CEP_SITE -O $GET_CEP_FILE 
-	unzip $GET_CEP_FILE
+	unzip $GET_CEP_FILE    
 	ln -s $CEP_TMP_PATH /opt/WSO2/cep
+
+    	#procedura Mysql
+	wget $GET_MYSQL_CONNECTOR -O /opt/WSO2/esb/repository/components/lib/mysql-connector-java-5.1.40-bin.jar
+    wget $GET_DATASOURCETEMPLATE_CONNECTOR  -O  /opt/WSO2/esb/repository/conf/datasources/master-datasources.xml 
+    sed -e "s/XX_IP_XX/10.0.2.10/g"  -i /opt/WSO2/esb/repository/conf/datasources/master-datasources.xml 
+	sed -e "s/XX_DB_XX/$DBCEP/g" -i   /opt/WSO2/esb/repository/conf/datasources/master-datasources.xml 
+    sed -e "s/XX_USER_XX/$DBUSERCEP/g" -i  /opt/WSO2/esb/repository/conf/datasources/master-datasources.xml 
+    sed -e "s/XX_PASSWORD_XX/$DBPASSCEP/g"  -i  /opt/WSO2/esb/repository/conf/datasources/master-datasources.xml 
+    
+
+
+	chown -R  $CEP_USER:$CEP_USER /opt
+
 
  
     logger " Done installing WSO2 Complex Event Processor installed in: $CEP_TMP_PATH   linked in /opt/WSO2/cep"	
@@ -403,7 +449,7 @@ service cep_service start
 
 
 apt-get -y install  mysql-client
-#mysql -u root -p 
+mysql -u root -p 
 #create database regdb character set latin1;
 #GRANT ALL ON regdb.* TO regadmin@localhost IDENTIFIED BY "regadmin";
 #FLUSH PRIVILEGES;
@@ -428,6 +474,18 @@ setup_IS() {
     wget  $GET_IS_SITE -O $GET_IS_FILE 
 	unzip $GET_IS_FILE
 	ln -s $IS_TMP_PATH /opt/WSO2/IdentityServer
+
+
+	   	#procedura Mysql
+	wget $GET_MYSQL_CONNECTOR -O /opt/WSO2/esb/repository/components/lib/mysql-connector-java-5.1.40-bin.jar
+    wget $GET_DATASOURCETEMPLATE_CONNECTOR  -O  /opt/WSO2/esb/repository/conf/datasources/master-datasources.xml 
+    sed -e "s/XX_IP_XX/10.0.2.10/g"  -i /opt/WSO2/esb/repository/conf/datasources/master-datasources.xml 
+	sed -e "s/XX_DB_XX/$DBIS/g" -i   /opt/WSO2/esb/repository/conf/datasources/master-datasources.xml 
+    sed -e "s/XX_USER_XX/$DBUSERIS/g" -i  /opt/WSO2/esb/repository/conf/datasources/master-datasources.xml 
+    sed -e "s/XX_PASSWORD_XX/$DBPASSIS/g"  -i  /opt/WSO2/esb/repository/conf/datasources/master-datasources.xml 
+
+	chown -R  $IS_USER:$IS_USER/opt
+
  
     logger "Done installing Identiy Server installed in: $IS_TMP_PATH  linked in /opt/WSO2/IdentityServer"
 	
@@ -512,6 +570,15 @@ echo "* hard nproc 20000" >> /etc/security/limits.conf
 
 
 ######
+crea_uenti_mysql(){
+MYSQL=`which mysql`
+Q1="CREATE DATABASE IF NOT EXISTS $DB1;"
+Q2="GRANT USAGE ON *.* TO $USER2@'%' IDENTIFIED BY '$PASS3';"
+Q3="GRANT ALL PRIVILEGES ON $DB1.* TO $USER2@'%';"
+Q4="FLUSH PRIVILEGES;"
+SQL="${Q1}${Q2}${Q3}${Q4}"
+$MYSQL -uroot -p$mysqlPassword -e "$SQL"
+}
 
 ########### MYSQL Setup
 setup_MYSQL() {
@@ -525,14 +592,48 @@ echo "mysql-server-5.6 mysql-server/root_password_again password $mysqlPassword"
 #install mysql-server 5.6
 apt-get -y install mysql-server-5.6
 
+echo "  [mysqld]  " > /etc/mysql/conf.d/wso2.cnf 
+echo "  bind-address            = 0.0.0.0 " >> /etc/mysql/conf.d/wso2.cnf 
+
+#create database regdb character set latin1;
+#GRANT ALL ON regdb.* TO regadmin@localhost IDENTIFIED BY "regadmin";
+#FLUSH PRIVILEGES;
+#quit;
+
+
+
+
+sleep 10
+
+#DB CEP
+DB1=cep_db
+USER2=cep_user
+PASS3=cep_password
+crea_uenti_mysql()
+#DB ESB
+DB1=esb_db
+USER2=esb_user
+PASS3=esb_password
+crea_uenti_mysql()
+#DB IS
+DB1=is_db
+USER2=is_user
+PASS3=is_password
+crea_uenti_mysql()
+
+
+#create database regdb character set latin1;
+#GRANT ALL ON regdb.* TO regadmin@localhost IDENTIFIED BY "regadmin";
+#FLUSH PRIVILEGES;
+#quit;
+
 #set the password
 #sudo mysqladmin -u root password "$mysqlPassword"   #without -p means here the initial password is empty
 
 #alternative update mysql root password method
 #sudo mysql -u root -e "set password for 'root'@'localhost' = PASSWORD('$mysqlPassword')"
 #without -p here means the initial password is empty
-
-#sudo service mysql restart
+sudo service mysql restart
 
 }
 
