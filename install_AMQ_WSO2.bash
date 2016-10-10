@@ -294,7 +294,7 @@ post_install_ESB() {
 
 
 #Crea Utente 
-groupadd -g 1010 $ESB_USE	
+groupadd -g 1010 $ESB_USER	
 useradd -u 1010 -g 1010 $ESB_USER
 
 echo "#! /bin/sh                                                                 " > /opt/WSO2/esb/esb_service
@@ -311,7 +311,7 @@ echo "   su -c \"\${startcmd}\" $ESB_USER                                       
 echo ";;                                                                         " >> /opt/WSO2/esb/esb_service
 echo "restart)                                                                   " >> /opt/WSO2/esb/esb_service
 echo "   echo \"Re-starting WSO2 Application Server ...\"                          " >> /opt/WSO2/esb/esb_service
-echo "   su -c """\${restartcmd}""" $ESB_USER                                         " >> /opt/WSO2/esb/esb_service
+echo "   su -c \"\${restartcmd}\" $ESB_USER                                         " >> /opt/WSO2/esb/esb_service
 echo ";;                                                                         " >> /opt/WSO2/esb/esb_service
 echo "stop)                                                                      " >> /opt/WSO2/esb/esb_service
 echo "   echo \"Stopping WSO2 Application Server ...\"                             " >> /opt/WSO2/esb/esb_service
@@ -403,13 +403,13 @@ service cep_service start
 
 
 apt-get -y install  mysql-client
-mysql -u root -p 
-create database regdb character set latin1;
-GRANT ALL ON regdb.* TO regadmin@localhost IDENTIFIED BY "regadmin";
-FLUSH PRIVILEGES;
-quit;
-mysql -u regadmin -p -Dregdb < '<PRODUCT_HOME>/dbscripts/mysql.sql';
-For Linux: <PRODUCT_HOME>/bin/wso2server.sh -Dsetup
+#mysql -u root -p 
+#create database regdb character set latin1;
+#GRANT ALL ON regdb.* TO regadmin@localhost IDENTIFIED BY "regadmin";
+#FLUSH PRIVILEGES;
+#quit;
+#mysql -u regadmin -p -Dregdb < '<PRODUCT_HOME>/dbscripts/mysql.sql';
+#For Linux: <PRODUCT_HOME>/bin/wso2server.sh -Dsetup
 #####
 
 
