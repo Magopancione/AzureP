@@ -304,21 +304,21 @@ echo "startcmd='/opt/WSO2/esb/bin/wso2server.sh start > /dev/null &'            
 echo "restartcmd='/opt/WSO2/esb/bin/wso2server.sh restart > /dev/null &'         " >> /opt/WSO2/esb/esb_service
 echo "stopcmd='/opt/WSO2/esb/bin/wso2server.sh stop > /dev/null &'               " >> /opt/WSO2/esb/esb_service
 echo "                                                                           " >> /opt/WSO2/esb/esb_service
-echo "case """\$1""" in                                                               " >> /opt/WSO2/esb/esb_service
+echo "case \"\$1\" in                                                               " >> /opt/WSO2/esb/esb_service
 echo "start)                                                                     " >> /opt/WSO2/esb/esb_service
-echo "   echo """Starting WSO2 Application Server ..."""                             " >> /opt/WSO2/esb/esb_service
-echo "   su -c """\${startcmd}" $ESB_USER                                           " >> /opt/WSO2/esb/esb_service
+echo "   echo \"Starting WSO2 Application Server ...\"                             " >> /opt/WSO2/esb/esb_service
+echo "   su -c \"\${startcmd}\" $ESB_USER                                           " >> /opt/WSO2/esb/esb_service
 echo ";;                                                                         " >> /opt/WSO2/esb/esb_service
 echo "restart)                                                                   " >> /opt/WSO2/esb/esb_service
-echo "   echo """Re-starting WSO2 Application Server ..."""                          " >> /opt/WSO2/esb/esb_service
+echo "   echo \"Re-starting WSO2 Application Server ...\"                          " >> /opt/WSO2/esb/esb_service
 echo "   su -c """\${restartcmd}""" $ESB_USER                                         " >> /opt/WSO2/esb/esb_service
 echo ";;                                                                         " >> /opt/WSO2/esb/esb_service
 echo "stop)                                                                      " >> /opt/WSO2/esb/esb_service
-echo "   echo """Stopping WSO2 Application Server ..."""                             " >> /opt/WSO2/esb/esb_service
-echo "   su -c """\${stopcmd}""" $ESB_USER                                            " >> /opt/WSO2/esb/esb_service
+echo "   echo \"Stopping WSO2 Application Server ...\"                             " >> /opt/WSO2/esb/esb_service
+echo "   su -c \"\${stopcmd}\" $ESB_USER                                            " >> /opt/WSO2/esb/esb_service
 echo ";;                                                                         " >> /opt/WSO2/esb/esb_service
 echo "*)                                                                         " >> /opt/WSO2/esb/esb_service
-echo "   echo """Usage: \$0 {start|stop|restart}"""                                   " >> /opt/WSO2/esb/esb_service
+echo "   echo \"Usage: \$0 {start|stop|restart}\"                                   " >> /opt/WSO2/esb/esb_service
 echo "exit 1                                                                     " >> /opt/WSO2/esb/esb_service
 echo "esac                                                                       " >> /opt/WSO2/esb/esb_service
 
@@ -366,30 +366,29 @@ useradd -u 1020 -g 1020 $CEP_USER
 
 #Crea servizio
 echo " #! /bin/sh                                                       " >  /opt/WSO2/cep/cep_service
-echo "export JAVA_HOME="""/opt/java/"""                                     " >> /opt/WSO2/cep/cep_service
+echo "export JAVA_HOME=\"/opt/java/\"                                     " >> /opt/WSO2/cep/cep_service
 echo "                                                                  " >> /opt/WSO2/cep/cep_service
 echo "startcmd='/opt/WSO2/cep/bin/wso2server.sh start > /dev/null &'    " >> /opt/WSO2/cep/cep_service
 echo "restartcmd='/opt/WSO2/cep/bin/wso2server.sh restart > /dev/null &'" >> /opt/WSO2/cep/cep_service
 echo "stopcmd='/opt/WSO2/cep/bin/wso2server.sh stop > /dev/null &'      " >> /opt/WSO2/cep/cep_service
 echo "                                                                  " >> /opt/WSO2/cep/cep_service
-echo "case """\$1""" in                                                      " >> /opt/WSO2/cep/cep_service
+echo "case \"\$1\" in                                                      " >> /opt/WSO2/cep/cep_service
 echo "start)                                                            " >> /opt/WSO2/cep/cep_service
-echo "   echo """Starting WSO2 Complex Event Processor ..."""               " >> /opt/WSO2/cep/cep_service
-echo "   su -c """\${startcmd}""" $CEP_USER                                  " >> /opt/WSO2/cep/cep_service
+echo "   echo \"Starting WSO2 Complex Event Processor ...\"               " >> /opt/WSO2/cep/cep_service
+echo "   su -c \"\${startcmd}\" $CEP_USER                                  " >> /opt/WSO2/cep/cep_service
 echo ";;                                                                " >> /opt/WSO2/cep/cep_service
 echo "restart)                                                          " >> /opt/WSO2/cep/cep_service
-echo "   echo """Re-starting WSO2 Complex Event Processor ..."""            " >> /opt/WSO2/cep/cep_service
+echo "   echo \"Re-starting WSO2 Complex Event Processor ...\"            " >> /opt/WSO2/cep/cep_service
 echo "   su -c """\${restartcmd}""" $CEP_USER                                " >> /opt/WSO2/cep/cep_service
 echo ";;                                                                " >> /opt/WSO2/cep/cep_service
 echo "stop)                                                             " >> /opt/WSO2/cep/cep_service
-echo "   echo """Stopping WSO2 Complex Event Processor ..."""               " >> /opt/WSO2/cep/cep_service
-echo "   su -c """\${stopcmd}""" $CEP_USER                                   " >> /opt/WSO2/cep/cep_service
+echo "   echo \"Stopping WSO2 Complex Event Processor ...\"               " >> /opt/WSO2/cep/cep_service
+echo "   su -c \"\${stopcmd}\" $CEP_USER                                   " >> /opt/WSO2/cep/cep_service
 echo ";;                                                                " >> /opt/WSO2/cep/cep_service
 echo "*)                                                                " >> /opt/WSO2/cep/cep_service
-echo "   echo """Usage: \$0 {start|stop|restart}"""                          " >> /opt/WSO2/cep/cep_service
+echo "   echo \"Usage: \$0 {start|stop|restart}\"                          " >> /opt/WSO2/cep/cep_service
 echo "exit 1                                                            " >> /opt/WSO2/cep/cep_service
 echo "esac                                                              " >> /opt/WSO2/cep/cep_service
-
 
  
 chmod a+x /opt/WSO2/cep/cep_service
@@ -400,9 +399,17 @@ update-rc.d cep_service defaults
 service cep_service start
 }
 
+### POST SETUP CEP
 
 
-
+apt-get -y install  mysql-client
+mysql -u root -p 
+create database regdb character set latin1;
+GRANT ALL ON regdb.* TO regadmin@localhost IDENTIFIED BY "regadmin";
+FLUSH PRIVILEGES;
+quit;
+mysql -u regadmin -p -Dregdb < '<PRODUCT_HOME>/dbscripts/mysql.sql';
+For Linux: <PRODUCT_HOME>/bin/wso2server.sh -Dsetup
 #####
 
 
@@ -441,27 +448,27 @@ useradd -u 1030 -g 1030 $IS_USER
 
 #Crea servizio
 echo " #! /bin/sh                                                                   " >> /opt/WSO2/IdentityServer/is_service
-echo " export JAVA_HOME="/opt/java"                                                 " >> /opt/WSO2/IdentityServer/is_service
+echo " export JAVA_HOME=\"/opt/java\"                                                 " >> /opt/WSO2/IdentityServer/is_service
 echo "                                                                              " >> /opt/WSO2/IdentityServer/is_service
 echo " startcmd='/opt/WSO2/IdentityServer/bin/wso2server.sh start > /dev/null &'    " >> /opt/WSO2/IdentityServer/is_service
 echo " restartcmd='/opt/WSO2/IdentityServer/bin/wso2server.sh restart > /dev/null &'" >> /opt/WSO2/IdentityServer/is_service
 echo " stopcmd='/opt/WSO2/IdentityServer/bin/wso2server.sh stop > /dev/null &'      " >> /opt/WSO2/IdentityServer/is_service
 echo "                                                                              " >> /opt/WSO2/IdentityServer/is_service
-echo " case """\$1""" in                                                                 " >> /opt/WSO2/IdentityServer/is_service
+echo " case \\$1\" in                                                                 " >> /opt/WSO2/IdentityServer/is_service
 echo " start)                                                                       " >> /opt/WSO2/IdentityServer/is_service
-echo "    echo """Starting WSO2 Application Server ..."""                               " >> /opt/WSO2/IdentityServer/is_service
+echo "    echo \"Starting WSO2 Application Server ...\"                               " >> /opt/WSO2/IdentityServer/is_service
 echo "    su -c """\${startcmd}""" $IS_USER                                              " >> /opt/WSO2/IdentityServer/is_service
 echo " ;;                                                                           " >> /opt/WSO2/IdentityServer/is_service
 echo " restart)                                                                     " >> /opt/WSO2/IdentityServer/is_service
-echo "    echo """Re-starting WSO2 Application Server ..."""                            " >> /opt/WSO2/IdentityServer/is_service
-echo "    su -c """\${restartcmd}""" $IS_USER                                            " >> /opt/WSO2/IdentityServer/is_service
+echo "    echo \"Re-starting WSO2 Application Server ...\"                            " >> /opt/WSO2/IdentityServer/is_service
+echo "    su -c \"\${restartcmd}\" $IS_USER                                            " >> /opt/WSO2/IdentityServer/is_service
 echo " ;;                                                                           " >> /opt/WSO2/IdentityServer/is_service
 echo " stop)                                                                        " >> /opt/WSO2/IdentityServer/is_service
-echo "    echo """Stopping WSO2 Application Server ..."""                               " >> /opt/WSO2/IdentityServer/is_service
-echo "    su -c """\${stopcmd}""" $IS_USER                                               " >> /opt/WSO2/IdentityServer/is_service
+echo "    echo \"Stopping WSO2 Application Server ...\"                               " >> /opt/WSO2/IdentityServer/is_service
+echo "    su -c \"\${stopcmd}\" $IS_USER                                               " >> /opt/WSO2/IdentityServer/is_service
 echo " ;;                                                                           " >> /opt/WSO2/IdentityServer/is_service
 echo " *)                                                                           " >> /opt/WSO2/IdentityServer/is_service
-echo "    echo """Usage: \$0 {start|stop|restart}"""                                     " >> /opt/WSO2/IdentityServer/is_service
+echo "    echo \"Usage: \$0 {start|stop|restart}\"                                     " >> /opt/WSO2/IdentityServer/is_service
 echo " exit 1                                                                       " >> /opt/WSO2/IdentityServer/is_service
 echo " esac                                                                         " >> /opt/WSO2/IdentityServer/is_service
  
@@ -625,6 +632,8 @@ setup_product() {
 	logger " ------Done configuring CEP ------- "
 
 }
+
+
 
 
 
