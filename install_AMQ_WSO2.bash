@@ -606,6 +606,7 @@ echo "  bind-address            = 0.0.0.0 " >> /etc/mysql/conf.d/wso2.cnf
 
 sleep 10
 
+
 #DB CEP
 export DB1=cep_db
 export SER2=cep_user
