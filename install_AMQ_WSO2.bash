@@ -343,7 +343,7 @@ echo "case \"\$1\" in                                                           
 echo "start)                                                                     " >> /opt/WSO2/esb/esb_service
 echo "   echo \"Starting WSO2 Application Server ...\"                             " >> /opt/WSO2/esb/esb_service
 echo "   su -c \"\${startcmd}\" $ESB_USER                                           " >> /opt/WSO2/esb/esb_service
-echo ";;                                                                         " >> /opt/cdWSO2/esb/esb_service
+echo ";;                                                                         " >> /opt/WSO2/esb/esb_service
 echo "restart)                                                                   " >> /opt/WSO2/esb/esb_service
 echo "   echo \"Re-starting WSO2 Application Server ...\"                          " >> /opt/WSO2/esb/esb_service
 echo "   su -c \"\${restartcmd}\" $ESB_USER                                         " >> /opt/WSO2/esb/esb_service
@@ -448,8 +448,8 @@ service cep_service start
 ### POST SETUP CEP
 
 
-apt-get -y install  mysql-client
-mysql -u root -p 
+#apt-get -y install  mysql-client
+#mysql -u root -p 
 #create database regdb character set latin1;
 #GRANT ALL ON regdb.* TO regadmin@localhost IDENTIFIED BY "regadmin";
 #FLUSH PRIVILEGES;
@@ -477,6 +477,7 @@ setup_IS() {
 
 
 	   	#procedura Mysql
+
 	wget $GET_MYSQL_CONNECTOR -O /opt/WSO2/esb/repository/components/lib/mysql-connector-java-5.1.40-bin.jar
     wget $GET_DATASOURCETEMPLATE_CONNECTOR  -O  /opt/WSO2/esb/repository/conf/datasources/master-datasources.xml 
     sed -e "s/XX_IP_XX/10.0.2.10/g"  -i /opt/WSO2/esb/repository/conf/datasources/master-datasources.xml 
@@ -485,7 +486,7 @@ setup_IS() {
     sed -e "s/XX_PASSWORD_XX/$DBPASSIS/g"  -i  /opt/WSO2/esb/repository/conf/datasources/master-datasources.xml 
 
 	chown -R  $IS_USER:$IS_USER/opt
-
+    
  
     logger "Done installing Identiy Server installed in: $IS_TMP_PATH  linked in /opt/WSO2/IdentityServer"
 	
