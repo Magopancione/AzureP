@@ -578,7 +578,7 @@ echo "* hard nproc 20000" >> /etc/security/limits.conf
 
 ######
 crea_uenti_mysql(){
-MYSQL=`which mysql`
+MYSQL=$(which mysql)
 Q1="CREATE DATABASE IF NOT EXISTS $DB1;"
 Q2="GRANT USAGE ON *.* TO $USER2@'%' IDENTIFIED BY '$PASS3';"
 Q3="GRANT ALL PRIVILEGES ON $DB1.* TO $USER2@'%';"
@@ -600,7 +600,7 @@ echo "mysql-server-5.6 mysql-server/root_password_again password $mysqlPassword"
 apt-get -y install mysql-server-5.6
 
 echo "  [mysqld]  " > /etc/mysql/conf.d/wso2.cnf 
-echo "  bind-address            = 0.0.0.0 " >> /etc/mysql/conf.d/wso2.cnf 
+echo "  bind-address  = 0.0.0.0 " >> /etc/mysql/conf.d/wso2.cnf 
 
 #create database regdb character set latin1;
 #GRANT ALL ON regdb.* TO regadmin@localhost IDENTIFIED BY "regadmin";
@@ -614,10 +614,7 @@ sleep 10
 
 
 #DB CEP
-$DB1=cep_db
-$USER2=cep_user
-$PASS3=cep_password
-crea_uenti_mysql()
+
 #DB ESB
 #$DB1=esb_db
 #$USER2=esb_user
@@ -737,6 +734,10 @@ setup_product() {
 	then
 	 setup_diskDB
 	 setup_MYSQL
+	 $DB1=cep_db
+     $USER2=cep_user
+     $PASS3=cep_password
+     crea_uenti_mysql()
 	fi
 	logger " ------Done configuring CEP ------- "
 
