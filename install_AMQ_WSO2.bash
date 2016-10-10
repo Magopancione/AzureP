@@ -619,15 +619,15 @@ $USER2=cep_user
 $PASS3=cep_password
 crea_uenti_mysql()
 #DB ESB
-$DB1=esb_db
-$USER2=esb_user
-$PASS3=esb_password
-crea_uenti_mysql()
+#$DB1=esb_db
+#$USER2=esb_user
+#$PASS3=esb_password
+#crea_uenti_mysql()
 #DB IS
-$DB1=is_db
-$USER2=is_user
-$PASS3=is_password
-crea_uenti_mysql()
+#$DB1=is_db
+#$USER2=is_user
+#$PASS3=is_password
+#crea_uenti_mysql()
 
 
 #create database regdb character set latin1;
@@ -641,7 +641,7 @@ crea_uenti_mysql()
 #alternative update mysql root password method
 #sudo mysql -u root -e "set password for 'root'@'localhost' = PASSWORD('$mysqlPassword')"
 #without -p here means the initial password is empty
-sudo service mysql restart
+#sudo service mysql restart
 
 }
 
