@@ -431,7 +431,7 @@
     },
     "ElasticScriptCommandToExecute": {
       "type": "string",
-      "defaultValue": "bash install_AMQ_WSO2.bash",
+      "defaultValue": "bash elasticsearch-ubuntu-install.sh",
       "metadata": {
         "description": "bash script command line for Elastic installation"
       }
@@ -525,13 +525,13 @@
     "dataDisk2VhdName1": "[concat(variables('vhdContainer1'),parameters('vmName1'),'dataDisk2.vhd')]",
     "executeParamVm1":  "[concat(parameters('customScriptCommandToExecute'), ' -m Q1 -s  NA -p  NA -t ACTIVEMQ')]",
 	"executeParamVm2":  "[concat(parameters('customScriptCommandToExecute'), ' -m Q2 -s  NA -p  NA -t ACTIVEMQ')]",
-	"executeParamVm3":  "[concat(parameters('customScriptCommandToExecute'), ' -m Q3 -s  NA -p  NA -t ESB')]",
-	"executeParamVm4":  "[concat(parameters('customScriptCommandToExecute'), ' -m Q4 -s  NA -p  NA -t CEP')]",
-	"executeParamVm5":  "[concat(parameters('customScriptCommandToExecute'), ' -m Q5 -s  NA -p  NA -t IS')]",
-	"executeParamVm6":  "[concat(parameters('customScriptCommandToExecute'), ' -m Q6 -s  NA -p  NA -t MYSQL')]",
-	"executeParamVm7":  "[concat(parameters('customScriptCommandToExecute'), ' -m Q7 -s  NA -p  NA -t MYSQL')]",
-	"executeParamVm8":  "[concat(parameters('customScriptCommandToExecute'), ' -m Q8 -s  NA -p  NA -t MYSQL')]",
-	"executeParamVm9":  "[concat(parameters('customScriptCommandToExecute'), ' -m Q9 -s  NA -p  NA -t MYSQL')]",
+	"executeParamVm3":  "[concat(parameters('customScriptCommandToExecute'), ' -m ESB -s  NA -p  NA -t ESB')]",
+	"executeParamVm4":  "[concat(parameters('customScriptCommandToExecute'), ' -m CEP -s  NA -p  NA -t CEP')]",
+	"executeParamVm5":  "[concat(parameters('customScriptCommandToExecute'), ' -m IS -s  NA -p  NA -t IS')]",
+	"executeParamVm6":  "[concat(parameters('customScriptCommandToExecute'), ' -m Mysql -s  NA -p  ', parameters('mysqlPassword'),' -t MYSQL')]",
+	"executeParamVm7":  "[concat(parameters('ElasticScriptCommandToExecute'), ' -xn clusterMaster -v 2.3.1  -d 10.0.2.2-3')]",
+	"executeParamVm8":  "[concat(parameters('ElasticScriptCommandToExecute'), ' -yn clusterMaster -v 2.3.1  -d 10.0.2.2-3')]",
+	"executeParamVm9":  "[concat(parameters('ElasticScriptCommandToExecute'), ' -zn clusterMaster -v 2.3.1  -d 10.0.2.2-3')]",
     "customScriptParamVm1": "[concat(parameters('vmIP1'), ' bootstrap-pxc ', parameters('GiottoConfigFilePath'))]",
     "vmExtensionName1": "[concat(parameters('vmName1'),'/', variables('vmExtensionName'))]",
     "vhdContainer2": "[concat('http://',parameters('storageAccount'),'.blob.core.windows.net/vm2vhds/')]",
@@ -1150,7 +1150,7 @@
       "location": "[resourceGroup().location]",
       "dependsOn": [
         "[concat('Microsoft.Compute/virtualMachines/', parameters('vmName3'))]",
-        "[concat('Microsoft.Compute/virtualMachines/',parameters('vmName6'),'/extensions/',variables('vmExtensionName'))]"
+        "[concat('Microsoft.Compute/virtualMachines/',parameters('vmName5'),'/extensions/',variables('vmExtensionName'))]"
       ],
       "properties": {
         "publisher": "Microsoft.Azure.Extensions",
@@ -1241,7 +1241,7 @@
       "location": "[resourceGroup().location]",
       "dependsOn": [
         "[concat('Microsoft.Compute/virtualMachines/', parameters('vmName4'))]",
-        "[concat('Microsoft.Compute/virtualMachines/',parameters('vmName6'),'/extensions/',variables('vmExtensionName'))]"
+        "[concat('Microsoft.Compute/virtualMachines/',parameters('vmName5'),'/extensions/',variables('vmExtensionName'))]"
       ],
       "properties": {
         "publisher": "Microsoft.Azure.Extensions",
@@ -1523,7 +1523,7 @@
         "autoUpgradeMinorVersion": true,
         "settings": {
           "fileUris": [
-            "[parameters('customScriptFilePath')]"
+            "[parameters('ElasticScriptFilePath')]"
           ]
         },
         "protectedSettings": {
@@ -1614,7 +1614,7 @@
         "autoUpgradeMinorVersion": true,
         "settings": {
           "fileUris": [
-            "[parameters('customScriptFilePath')]"
+            "[parameters('ElasticScriptFilePath')]"
           ]
         },
         "protectedSettings": {
@@ -1705,7 +1705,7 @@
         "autoUpgradeMinorVersion": true,
         "settings": {
           "fileUris": [
-            "[parameters('customScriptFilePath')]"
+            "[parameters('ElasticScriptFilePath')]"
           ]
         },
         "protectedSettings": {

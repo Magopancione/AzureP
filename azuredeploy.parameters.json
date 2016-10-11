@@ -60,19 +60,19 @@
       "value": "Elastic-Master"
     },
     "vmIP7": {
-      "value": "10.0.2.15"
+      "value": "10.0.2.20"
     },  
    "vmName8": {
       "value": "Elastic-Client"
     },
     "vmIP8": {
-      "value": "10.0.2.16"
+      "value": "10.0.2.21"
     },  
     "vmName9": {
       "value": "Elastic-Data"
     },
     "vmIP9": {
-      "value": "10.0.2.17"
+      "value": "10.0.2.22"
     },    
     "DiskDataGB": {
       "value": 10
