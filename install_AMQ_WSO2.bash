@@ -302,28 +302,30 @@ echo "net.ipv4.tcp_wmem = 4096 4096 16777216       " >> /etc/sysctl.conf
 
 setup_ESB() {
 	logger "Start installing Enterpris Service Bus..."
+	BASE=/opt/WSO2/esb
 	apt-get install unzip -y
 	mkdir -p /opt/WSO2/
 	cd /opt/
     wget  $GET_ESB_SITE -O $GET_ESB_FILE 
 	unzip $GET_ESB_FILE
-	ln -s $ESB_TMP_PATH /opt/WSO2/esb
-
+	ln -s $ESB_TMP_PATH $BASE
+	
 	#procedura Mysql
-	wget $GET_MYSQL_CONNECTOR -O /opt/WSO2/esb/repository/components/lib/mysql-connector-java-5.1.40-bin.jar
-    wget $GET_DATASOURCETEMPLATE_CONNECTOR  -O  /opt/WSO2/esb/repository/conf/datasources/master-datasources.xml 
-    sed -e "s/XX_IP_XX/10.0.2.10/g"  -i /opt/WSO2/esb/repository/conf/datasources/master-datasources.xml 
-	sed -e "s/XX_DB_XX/$DBESB/g" -i   /opt/WSO2/esb/repository/conf/datasources/master-datasources.xml 
-    sed -e "s/XX_USER_XX/$DBUSERESB/g" -i  /opt/WSO2/esb/repository/conf/datasources/master-datasources.xml 
-    sed -e "s/XX_PASSWORD_XX/$DBPASSESB/g"  -i  /opt/WSO2/esb/repository/conf/datasources/master-datasources.xml 
-
-
-    mysql -u$DBUSERESB -p$DBPASSESB -D$DBESB -h 10.0.2.10 < $ESB_TMP_PATH/dbscripts/mysql.sql
+    apt-get install -y mysql-client 
+    BASE=$ESB_TMP_PATH 
+	wget $GET_MYSQL_CONNECTOR -O $BASE/repository/components/lib/mysql-connector-java-5.1.40-bin.jar
+    wget $GET_DATASOURCETEMPLATE_CONNECTOR  -O  $BASE/repository/conf/datasources/master-datasources.xml 
+    sed -e "s/XX_IP_XX/10.0.2.10/g"  -i $BASE/repository/conf/datasources/master-datasources.xml 
+	sed -e "s/XX_DB_XX/$DBESB/g" -i   $BASE/repository/conf/datasources/master-datasources.xml 
+    sed -e "s/XX_USER_XX/$DBUSERESB/g" -i  $BASE/repository/conf/datasources/master-datasources.xml 
+    sed -e "s/XX_PASSWORD_XX/$DBPASSESB/g"  -i  $BASE/repository/conf/datasources/master-datasources.xml 
+    mysql -u$DBUSERESB -p$DBPASSESB -D$DBESB -h 10.0.2.10 < $BASE/dbscripts/mysql.sql
+		
 	#Crea Utente 
 	groupadd -g 1010 $ESB_USER	
 	useradd -u 1010 -g 1010 $ESB_USER
-	chown -R  $ESB_USER:$ESB_USER /opt
-    logger "Done installing Enterpris Service Bus installed in: $ESB_TMP_PATH   linked in /opt/WSO2/esb "	
+	chown -R  $ESB_USER:$ESB_USER $BASE
+    logger "Done installing Enterpris Service Bus installed in: $ESB_TMP_PATH   linked in $BASE "	
 	
 }
 
@@ -378,26 +380,27 @@ service esb_service start
 setup_CEP() {
 	logger " Start installing Complex Event Processor..."
 	apt-get install unzip -y
+	BASE=/opt/WSO2/cep
 	mkdir -p /opt/WSO2/
 	cd /opt/
     wget  $GET_CEP_SITE -O $GET_CEP_FILE 
 	unzip $GET_CEP_FILE    
-	ln -s $CEP_TMP_PATH /opt/WSO2/cep
+	ln -s $CEP_TMP_PATH $BASE
 
     	#procedura Mysql
     apt-get install -y mysql-client 
-	wget $GET_MYSQL_CONNECTOR -O /opt/WSO2/esb/repository/components/lib/mysql-connector-java-5.1.40-bin.jar
-    wget $GET_DATASOURCETEMPLATE_CONNECTOR  -O  /opt/WSO2/cep/repository/conf/datasources/master-datasources.xml 
-    sed -e "s/XX_IP_XX/10.0.2.10/g"  -i /opt/WSO2/cep/repository/conf/datasources/master-datasources.xml 
-	sed -e "s/XX_DB_XX/$DBCEP/g" -i   /opt/WSO2/cep/repository/conf/datasources/master-datasources.xml 
-    sed -e "s/XX_USER_XX/$DBUSERCEP/g" -i  /opt/WSO2/cep/repository/conf/datasources/master-datasources.xml 
-    sed -e "s/XX_PASSWORD_XX/$DBPASSCEP/g"  -i  /opt/WSO2/cep/repository/conf/datasources/master-datasources.xml 
-    mysql -u$DBUSERCEP -p$DBPASSCEP -D$DBCEP -h 10.0.2.10 < $CEP_TMP_PATH/dbscripts/mysql.sql
+	wget $GET_MYSQL_CONNECTOR -O $BASE/repository/components/lib/mysql-connector-java-5.1.40-bin.jar
+    wget $GET_DATASOURCETEMPLATE_CONNECTOR  -O  $BASE/repository/conf/datasources/master-datasources.xml 
+    sed -e "s/XX_IP_XX/10.0.2.10/g"  -i $BASE/repository/conf/datasources/master-datasources.xml 
+	sed -e "s/XX_DB_XX/$DBCEP/g" -i   $BASE/repository/conf/datasources/master-datasources.xml 
+    sed -e "s/XX_USER_XX/$DBUSERCEP/g" -i  $BASE/repository/conf/datasources/master-datasources.xml 
+    sed -e "s/XX_PASSWORD_XX/$DBPASSCEP/g"  -i  $BASE/repository/conf/datasources/master-datasources.xml 
+    mysql -u$DBUSERCEP -p$DBPASSCEP -D$DBCEP -h 10.0.2.10 < $BASE/dbscripts/mysql.sql
 
     #Crea Utente 
     groupadd -g 1020 $CEP_USER	
     useradd -u 1020 -g 1020 $CEP_USER
-	chown -R  $CEP_USER:$CEP_USER /opt
+	chown -R  $CEP_USER:$CEP_USER $BASE
 
 
  
@@ -469,34 +472,32 @@ service cep_service start
 setup_IS() {
 	logger "Start installing java..."
 
-
-
 	apt-get install unzip -y
+	BASE=/opt/WSO2/IdentityServer
 	mkdir -p /opt/WSO2/
 	cd /opt/
     wget  $GET_IS_SITE -O $GET_IS_FILE 
 	unzip $GET_IS_FILE
-	ln -s $IS_TMP_PATH /opt/WSO2/IdentityServer
+	ln -s $IS_TMP_PATH $BASE
 
-
-	   	#procedura Mysql
-
-	wget $GET_MYSQL_CONNECTOR -O /opt/WSO2/esb/repository/components/lib/mysql-connector-java-5.1.40-bin.jar
-    wget $GET_DATASOURCETEMPLATE_CONNECTOR  -O  /opt/WSO2/esb/repository/conf/datasources/master-datasources.xml 
-    sed -e "s/XX_IP_XX/10.0.2.10/g"  -i /opt/WSO2/esb/repository/conf/datasources/master-datasources.xml 
-	sed -e "s/XX_DB_XX/$DBIS/g" -i   /opt/WSO2/esb/repository/conf/datasources/master-datasources.xml 
-    sed -e "s/XX_USER_XX/$DBUSERIS/g" -i  /opt/WSO2/esb/repository/conf/datasources/master-datasources.xml 
-    sed -e "s/XX_PASSWORD_XX/$DBPASSIS/g"  -i  /opt/WSO2/esb/repository/conf/datasources/master-datasources.xml 
-    mysql -u$DBUSERIS -p$DBPASSIS -D$DBIS -h 10.0.2.10 < $CEP_TMP_PATH/dbscripts/mysql.sql
-
-
+    #procedura Mysql
+    apt-get install -y mysql-client 
+	BASE=$IS_TMP_PATH
+	wget $GET_MYSQL_CONNECTOR -O $BASE/repository/components/lib/mysql-connector-java-5.1.40-bin.jar
+    wget $GET_DATASOURCETEMPLATE_CONNECTOR  -O  $BASE/repository/conf/datasources/master-datasources.xml 
+    sed -e "s/XX_IP_XX/10.0.2.10/g"  -i $BASE/repository/conf/datasources/master-datasources.xml 
+	sed -e "s/XX_DB_XX/$DBIS/g" -i   $BASE/repository/conf/datasources/master-datasources.xml 
+    sed -e "s/XX_USER_XX/$DBUSERIS/g" -i  $BASE/repository/conf/datasources/master-datasources.xml 
+    sed -e "s/XX_PASSWORD_XX/$DBPASSIS/g"  -i  $BASE/repository/conf/datasources/master-datasources.xml 
+    mysql -u$DBUSERIS -p$DBPASSIS -D$DBIS -h 10.0.2.10 < $BASE/dbscripts/mysql.sql
+		
 	#Crea Utente 
 	groupadd -g 1030 $IS_USER	
 	useradd -u 1030 -g 1030 $IS_USER
-	chown -R  $IS_USER:$IS_USER/opt
+	chown -R  $IS_USER:$IS_USER  $BASE	
     
  
-    logger "Done installing Identiy Server installed in: $IS_TMP_PATH  linked in /opt/WSO2/IdentityServer"
+    logger "Done installing Identiy Server installed in: $IS_TMP_PATH  linked in $BASE"
 	
 }
 
@@ -742,7 +743,7 @@ setup_product() {
          PASS3=$DBPASSIS
          crea_utenti_mysql
     #DB IS
-         DB1=DBIS
+         DB1=$DBIS
          USER2=$DBUSERIS
          PASS3=$DBPASSIS
          crea_utenti_mysql
