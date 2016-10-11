@@ -188,6 +188,7 @@ update-rc.d -f apparmor remove
 #Create Data
 wget "https://raw.githubusercontent.com/Magopancione/AzureP/master/configureLVM.sh" -O configureLVM.sh
 bash configureLVM.sh -dbluns 0,1
+ls -s /mysql-DB /var/lib/mysql
 }
 
 ################## END ##################
@@ -324,7 +325,7 @@ setup_ESB() {
 	#Crea Utente 
 	groupadd -g 1010 $ESB_USER	
 	useradd -u 1010 -g 1010 $ESB_USER
-	chown -R  $ESB_USER:$ESB_USER $BASE
+	chown -R  $ESB_USER:$ESB_USER $ESB_TMP_PATH 
     logger "Done installing Enterpris Service Bus installed in: $ESB_TMP_PATH   linked in $BASE "	
 	
 }
@@ -400,7 +401,7 @@ setup_CEP() {
     #Crea Utente 
     groupadd -g 1020 $CEP_USER	
     useradd -u 1020 -g 1020 $CEP_USER
-	chown -R  $CEP_USER:$CEP_USER $BASE
+	chown -R  $CEP_USER:$CEP_USER $CEP_TMP_PATH
 
 
  
@@ -494,7 +495,7 @@ setup_IS() {
 	#Crea Utente 
 	groupadd -g 1030 $IS_USER	
 	useradd -u 1030 -g 1030 $IS_USER
-	chown -R  $IS_USER:$IS_USER  $BASE	
+	chown -R  $IS_USER:$IS_USER  $IS_TMP_PATH 
     
  
     logger "Done installing Identiy Server installed in: $IS_TMP_PATH  linked in $BASE"
@@ -510,28 +511,28 @@ post_install_IS() {
 
 
 #Crea servizio
-echo " #! /bin/sh                                                                   " >> /opt/WSO2/IdentityServer/is_service
-echo " export JAVA_HOME=\"/opt/java\"                                                 " >> /opt/WSO2/IdentityServer/is_service
+echo " #! /bin/sh                                                                   " > /opt/WSO2/IdentityServer/is_service
+echo " export JAVA_HOME=\"/opt/java\"                                               " >> /opt/WSO2/IdentityServer/is_service
 echo "                                                                              " >> /opt/WSO2/IdentityServer/is_service
 echo " startcmd='/opt/WSO2/IdentityServer/bin/wso2server.sh start > /dev/null &'    " >> /opt/WSO2/IdentityServer/is_service
 echo " restartcmd='/opt/WSO2/IdentityServer/bin/wso2server.sh restart > /dev/null &'" >> /opt/WSO2/IdentityServer/is_service
 echo " stopcmd='/opt/WSO2/IdentityServer/bin/wso2server.sh stop > /dev/null &'      " >> /opt/WSO2/IdentityServer/is_service
 echo "                                                                              " >> /opt/WSO2/IdentityServer/is_service
-echo " case \\$1\" in                                                                 " >> /opt/WSO2/IdentityServer/is_service
+echo " case \"\$1\" in                                                              " >> /opt/WSO2/IdentityServer/is_service
 echo " start)                                                                       " >> /opt/WSO2/IdentityServer/is_service
-echo "    echo \"Starting WSO2 Application Server ...\"                               " >> /opt/WSO2/IdentityServer/is_service
-echo "    su -c """\${startcmd}""" $IS_USER                                              " >> /opt/WSO2/IdentityServer/is_service
+echo "    echo \"Starting WSO2 Application Server ...\"                             " >> /opt/WSO2/IdentityServer/is_service
+echo "    su -c \"\${startcmd}\" $IS_USER                                           " >> /opt/WSO2/IdentityServer/is_service
 echo " ;;                                                                           " >> /opt/WSO2/IdentityServer/is_service
 echo " restart)                                                                     " >> /opt/WSO2/IdentityServer/is_service
-echo "    echo \"Re-starting WSO2 Application Server ...\"                            " >> /opt/WSO2/IdentityServer/is_service
-echo "    su -c \"\${restartcmd}\" $IS_USER                                            " >> /opt/WSO2/IdentityServer/is_service
+echo "    echo \"Re-starting WSO2 Application Server ...\"                          " >> /opt/WSO2/IdentityServer/is_service
+echo "    su -c \"\${restartcmd}\" $IS_USER                                         " >> /opt/WSO2/IdentityServer/is_service
 echo " ;;                                                                           " >> /opt/WSO2/IdentityServer/is_service
 echo " stop)                                                                        " >> /opt/WSO2/IdentityServer/is_service
-echo "    echo \"Stopping WSO2 Application Server ...\"                               " >> /opt/WSO2/IdentityServer/is_service
-echo "    su -c \"\${stopcmd}\" $IS_USER                                               " >> /opt/WSO2/IdentityServer/is_service
+echo "    echo \"Stopping WSO2 Application Server ...\"                             " >> /opt/WSO2/IdentityServer/is_service
+echo "    su -c \"\${stopcmd}\" $IS_USER                                            " >> /opt/WSO2/IdentityServer/is_service
 echo " ;;                                                                           " >> /opt/WSO2/IdentityServer/is_service
 echo " *)                                                                           " >> /opt/WSO2/IdentityServer/is_service
-echo "    echo \"Usage: \$0 {start|stop|restart}\"                                     " >> /opt/WSO2/IdentityServer/is_service
+echo "    echo \"Usage: \$0 {start|stop|restart}\"                                  " >> /opt/WSO2/IdentityServer/is_service
 echo " exit 1                                                                       " >> /opt/WSO2/IdentityServer/is_service
 echo " esac                                                                         " >> /opt/WSO2/IdentityServer/is_service
  
@@ -740,7 +741,7 @@ setup_product() {
     #DB ESB
          DB1=$DBESB
          USER2=$DBUSERESB
-         PASS3=$DBPASSIS
+         PASS3=$DBPASSESB
          crea_utenti_mysql
     #DB IS
          DB1=$DBIS

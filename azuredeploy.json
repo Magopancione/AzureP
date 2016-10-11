@@ -1150,7 +1150,7 @@
       "location": "[resourceGroup().location]",
       "dependsOn": [
         "[concat('Microsoft.Compute/virtualMachines/', parameters('vmName3'))]",
-        "[concat('Microsoft.Compute/virtualMachines/',parameters('vmName1'),'/extensions/',variables('vmExtensionName'))]"
+        "[concat('Microsoft.Compute/virtualMachines/',parameters('vmName6'),'/extensions/',variables('vmExtensionName'))]"
       ],
       "properties": {
         "publisher": "Microsoft.Azure.Extensions",
@@ -1241,7 +1241,7 @@
       "location": "[resourceGroup().location]",
       "dependsOn": [
         "[concat('Microsoft.Compute/virtualMachines/', parameters('vmName4'))]",
-        "[concat('Microsoft.Compute/virtualMachines/',parameters('vmName1'),'/extensions/',variables('vmExtensionName'))]"
+        "[concat('Microsoft.Compute/virtualMachines/',parameters('vmName6'),'/extensions/',variables('vmExtensionName'))]"
       ],
       "properties": {
         "publisher": "Microsoft.Azure.Extensions",
@@ -1332,7 +1332,7 @@
       "location": "[resourceGroup().location]",
       "dependsOn": [
         "[concat('Microsoft.Compute/virtualMachines/', parameters('vmName5'))]",
-        "[concat('Microsoft.Compute/virtualMachines/',parameters('vmName1'),'/extensions/',variables('vmExtensionName'))]"
+        "[concat('Microsoft.Compute/virtualMachines/',parameters('vmName6'),'/extensions/',variables('vmExtensionName'))]"
       ],
       "properties": {
         "publisher": "Microsoft.Azure.Extensions",
@@ -1514,7 +1514,7 @@
       "location": "[resourceGroup().location]",
       "dependsOn": [
         "[concat('Microsoft.Compute/virtualMachines/', parameters('vmName7'))]",
-        "[concat('Microsoft.Compute/virtualMachines/',parameters('vmName1'),'/extensions/',variables('vmExtensionName'))]"
+        "[concat('Microsoft.Compute/virtualMachines/',parameters('vmName6'),'/extensions/',variables('vmExtensionName'))]"
       ],
       "properties": {
         "publisher": "Microsoft.Azure.Extensions",
