@@ -308,8 +308,7 @@ setup_ESB() {
     wget  $GET_ESB_SITE -O $GET_ESB_FILE 
 	unzip $GET_ESB_FILE
 	ln -s $ESB_TMP_PATH /opt/WSO2/esb
-	cd /opt/WSO2/esb/repository/components/lib
-    
+
 	#procedura Mysql
 	wget $GET_MYSQL_CONNECTOR -O /opt/WSO2/esb/repository/components/lib/mysql-connector-java-5.1.40-bin.jar
     wget $GET_DATASOURCETEMPLATE_CONNECTOR  -O  /opt/WSO2/esb/repository/conf/datasources/master-datasources.xml 
@@ -318,6 +317,11 @@ setup_ESB() {
     sed -e "s/XX_USER_XX/$DBUSERESB/g" -i  /opt/WSO2/esb/repository/conf/datasources/master-datasources.xml 
     sed -e "s/XX_PASSWORD_XX/$DBPASSESB/g"  -i  /opt/WSO2/esb/repository/conf/datasources/master-datasources.xml 
 
+
+    mysql -u$DBUSERESB -p$DBPASSESB -D$DBESB -h 10.0.2.10 < $ESB_TMP_PATH/dbscripts/mysql.sql
+	#Crea Utente 
+	groupadd -g 1010 $ESB_USER	
+	useradd -u 1010 -g 1010 $ESB_USER
 	chown -R  $ESB_USER:$ESB_USER /opt
     logger "Done installing Enterpris Service Bus installed in: $ESB_TMP_PATH   linked in /opt/WSO2/esb "	
 	
@@ -332,11 +336,6 @@ post_install_ESB() {
 
 # da verificare ssl
 #/repository/conf/carbon.xml
-
-
-#Crea Utente 
-groupadd -g 1010 $ESB_USER	
-useradd -u 1010 -g 1010 $ESB_USER
 
 echo "#! /bin/sh                                                                 " > /opt/WSO2/esb/esb_service
 echo "export JAVA_HOME="/opt/java/"                                              " >> /opt/WSO2/esb/esb_service
@@ -386,15 +385,18 @@ setup_CEP() {
 	ln -s $CEP_TMP_PATH /opt/WSO2/cep
 
     	#procedura Mysql
+    apt-get install -y mysql-client 
 	wget $GET_MYSQL_CONNECTOR -O /opt/WSO2/esb/repository/components/lib/mysql-connector-java-5.1.40-bin.jar
-    wget $GET_DATASOURCETEMPLATE_CONNECTOR  -O  /opt/WSO2/esb/repository/conf/datasources/master-datasources.xml 
-    sed -e "s/XX_IP_XX/10.0.2.10/g"  -i /opt/WSO2/esb/repository/conf/datasources/master-datasources.xml 
-	sed -e "s/XX_DB_XX/$DBCEP/g" -i   /opt/WSO2/esb/repository/conf/datasources/master-datasources.xml 
-    sed -e "s/XX_USER_XX/$DBUSERCEP/g" -i  /opt/WSO2/esb/repository/conf/datasources/master-datasources.xml 
-    sed -e "s/XX_PASSWORD_XX/$DBPASSCEP/g"  -i  /opt/WSO2/esb/repository/conf/datasources/master-datasources.xml 
-    
+    wget $GET_DATASOURCETEMPLATE_CONNECTOR  -O  /opt/WSO2/cep/repository/conf/datasources/master-datasources.xml 
+    sed -e "s/XX_IP_XX/10.0.2.10/g"  -i /opt/WSO2/cep/repository/conf/datasources/master-datasources.xml 
+	sed -e "s/XX_DB_XX/$DBCEP/g" -i   /opt/WSO2/cep/repository/conf/datasources/master-datasources.xml 
+    sed -e "s/XX_USER_XX/$DBUSERCEP/g" -i  /opt/WSO2/cep/repository/conf/datasources/master-datasources.xml 
+    sed -e "s/XX_PASSWORD_XX/$DBPASSCEP/g"  -i  /opt/WSO2/cep/repository/conf/datasources/master-datasources.xml 
+    mysql -u$DBUSERCEP -p$DBPASSCEP -D$DBCEP -h 10.0.2.10 < $CEP_TMP_PATH/dbscripts/mysql.sql
 
-
+    #Crea Utente 
+    groupadd -g 1020 $CEP_USER	
+    useradd -u 1020 -g 1020 $CEP_USER
 	chown -R  $CEP_USER:$CEP_USER /opt
 
 
@@ -410,11 +412,6 @@ post_install_CEP() {
 
 # da verificare ssl
 #/repository/conf/carbon.xml
-
-
-#Crea Utente 
-groupadd -g 1020 $CEP_USER	
-useradd -u 1020 -g 1020 $CEP_USER
 
 #Crea servizio
 echo " #! /bin/sh                                                       " >  /opt/WSO2/cep/cep_service
@@ -490,7 +487,12 @@ setup_IS() {
 	sed -e "s/XX_DB_XX/$DBIS/g" -i   /opt/WSO2/esb/repository/conf/datasources/master-datasources.xml 
     sed -e "s/XX_USER_XX/$DBUSERIS/g" -i  /opt/WSO2/esb/repository/conf/datasources/master-datasources.xml 
     sed -e "s/XX_PASSWORD_XX/$DBPASSIS/g"  -i  /opt/WSO2/esb/repository/conf/datasources/master-datasources.xml 
+    mysql -u$DBUSERIS -p$DBPASSIS -D$DBIS -h 10.0.2.10 < $CEP_TMP_PATH/dbscripts/mysql.sql
 
+
+	#Crea Utente 
+	groupadd -g 1030 $IS_USER	
+	useradd -u 1030 -g 1030 $IS_USER
 	chown -R  $IS_USER:$IS_USER/opt
     
  
@@ -504,11 +506,6 @@ post_install_IS() {
 
 # da verificare ssl
 #/repository/conf/carbon.xml
-
-
-#Crea Utente 
-groupadd -g 1030 $IS_USER	
-useradd -u 1030 -g 1030 $IS_USER
 
 
 #Crea servizio
@@ -638,7 +635,7 @@ sleep 10
 #alternative update mysql root password method
 #sudo mysql -u root -e "set password for 'root'@'localhost' = PASSWORD('$mysqlPassword')"
 #without -p here means the initial password is empty
-#sudo service mysql restart
+service mysql restart
 
 }
 
@@ -733,11 +730,22 @@ setup_product() {
     if [ "$NODETYPE" == "MYSQL" ];
 	then
 	 setup_diskDB
-	 setup_MYSQL
-	 #$DB1=cep_db
-     #$USER2=cep_user
-     #$PASS3=cep_password
-     #crea_utenti_mysql()
+	 setup_MYSQL         
+	 #DB CEP
+         DB1=$DBCEP
+         USER2=$DBUSERCEP
+         PASS3=$DBPASSCEP
+         crea_utenti_mysql
+    #DB ESB
+         DB1=$DBESB
+         USER2=$DBUSERESB
+         PASS3=$DBPASSIS
+         crea_utenti_mysql
+    #DB IS
+         DB1=DBIS
+         USER2=$DBUSERIS
+         PASS3=$DBPASSIS
+         crea_utenti_mysql
 	fi
 	logger " ------Done configuring CEP ------- "
 
