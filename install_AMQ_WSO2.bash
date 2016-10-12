@@ -31,7 +31,7 @@ export JAVA_TMP_PATH="/opt/jre1.8.0_101"
 export GET_ACTIVEMQ_SITE="https://www.dropbox.com/s/azyqzj3hez84rq1/apache-activemq-5.9.0-bin.tar.gz?dl=0"
 export GET_ACTIVEMQ_FILE="apache-activemq-5.9.0-bin.tar.gz"
 export ACTIVEMQ_TMP_PATH="/opt/apache-activemq-5.9.0"
-export AMQ_USER="actuve_user"
+export AMQ_USER="active_user"
 
 #  Configure Identity Server parameters
 export GET_IS_SITE="https://www.dropbox.com/s/l8bb5e0nuv4sfe4/wso2is-5.2.0.zip?dl=0"
@@ -212,9 +212,8 @@ setup_activeMQ() {
 	
 	
 post_install_activeMQ() { 
-
-groupadd -g 1070 $AMQ_USER
-useradd -u 1070 -g 1010 $AMQ_USER
+	groupadd -g 1070 $AMQ_USER
+	useradd -u 1070 -g 1070 $AMQ_USER
 	chmod 755 /opt/ActiveMQ/bin/activemq
     ln -snf /opt/ActiveMQ/bin/activemq /etc/init.d/activemq_service
     update-rc.d activemq_service defaults

@@ -417,7 +417,7 @@
     },
    "ElasticScriptFilePath": {
       "type": "string",
-      "defaultValue": "https://raw.githubusercontent.com/Magopancione/AzureP/master/install_AMQ_WSO2.bash",
+      "defaultValue": "https://raw.githubusercontent.com/Magopancione/AzureP/master/elasticsearch-ubuntu-install.sh",
       "metadata": {
         "description": "bash file location to configure the cluster for Elastic installation"
       }
