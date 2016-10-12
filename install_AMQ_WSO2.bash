@@ -6,7 +6,7 @@
 mylog()
 {
     # If you want to enable this logging add a un-comment the line below and add your account id
-    curl -X POST -H "content-type:text/plain" --data-binary "${HOSTNAME} - $1" https://logs-01.loggly.com/inputs/72e878ca-1b43-4fb5-87ea-f78b6f378840/tag/es-extension,${HOSTNAME}
+    curl -X POST -H "content-type:text/plain" --data-binary "${HOSTNAME} - $1" https://logs-01.loggly.com/inputs/72e878ca-1b43-4fb5-87ea-f78b6f378840/tag/AMQeWSO2,${HOSTNAME}
     logger "$1"
 }
 

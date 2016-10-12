@@ -399,7 +399,7 @@
     },
     "ElasticScriptCommandToExecute": {
       "type": "string",
-      "defaultValue": "bash elasticsearch-ubuntu-install.sh",
+      "defaultValue": "bash elasticsearch-ubuntu-installV2.sh",
       "metadata": {
         "description": "bash script command line for Elastic installation"
       }
