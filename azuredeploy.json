@@ -1,4 +1,4 @@
-﻿{
+{
   "$schema": "http://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
   "contentVersion": "1.0.0.0",
   "parameters": {
@@ -252,14 +252,14 @@
     },
     "appFrontEndPort": {
       "type": "int",
-      "defaultValue": 80,
+      "defaultValue": 443,
       "metadata": {
         "description": "APP public port"
       }
     },
     "appBackEndPort": {
       "type": "int",
-      "defaultValue": 80,
+      "defaultValue": 1883,
       "metadata": {
         "description": "Giotto private port"
       }
@@ -268,12 +268,12 @@
       "type": "int",
       "defaultValue": 4,
       "metadata": {
-        "description": "idel timeout for load balancer"
+        "description": "idle timeout for load balancer"
       }
     },
     "probePort": {
       "type": "int",
-      "defaultValue": 1883,
+      "defaultValue": 22,
       "metadata": {
         "description": "cluster health check probe port exposed to load balancer"
       }
@@ -308,7 +308,7 @@
     },
     "sshNatRuleFrontEndPort1": {
       "type": "int",
-      "defaultValue": 443,
+      "defaultValue": 80,
       "metadata": {
         "description": "public ssh port for VM1"
       }
@@ -406,7 +406,7 @@
     }
   },
   "variables": {
-    "masterNodesIpPrefix": "[parameters('vmIP7')]", 
+    "masterNodesIpPrefix": "10.0.2.2", 
     "esSettings": {
       "clusterName": "[parameters('esClusterName')]",
       "version": "[parameters('esVersion')]",
@@ -473,14 +473,14 @@
     "dataDisk1VhdName1": "[concat(variables('vhdContainer1'),parameters('vmName1'),'dataDisk1.vhd')]",
     "dataDisk2VhdName1": "[concat(variables('vhdContainer1'),parameters('vmName1'),'dataDisk2.vhd')]",
     "executeParamVm1":  "[concat(parameters('customScriptCommandToExecute'), ' -m Q1 -s  NA -p  NA -t ACTIVEMQ')]",
-	"executeParamVm2":  "[concat(parameters('customScriptCommandToExecute'), ' -m Q2 -s  NA -p  NA -t ACTIVEMQ')]",
-	"executeParamVm3":  "[concat(parameters('customScriptCommandToExecute'), ' -m ESB -s  NA -p  NA -t ESB')]",
-	"executeParamVm4":  "[concat(parameters('customScriptCommandToExecute'), ' -m CEP -s  NA -p  NA -t CEP')]",
-	"executeParamVm5":  "[concat(parameters('customScriptCommandToExecute'), ' -m IS -s  NA -p  NA -t IS')]",
-	"executeParamVm6":  "[concat(parameters('customScriptCommandToExecute'), ' -m Mysql -s  NA -p  ', parameters('mysqlPassword'),' -t MYSQL')]",
-	"executeParamVm7":  "[concat(parameters('ElasticScriptCommandToExecute'), ' -xn ', variables('esSettings').clusterName, ' -v ', variables('esSettings').version, ' -d ', variables('esSettings').discoveryHosts)]",
-	"executeParamVm8":  "[concat(parameters('ElasticScriptCommandToExecute'), ' -xn ', variables('esSettings').clusterName, ' -v ', variables('esSettings').version, ' -d ', variables('esSettings').discoveryHosts)]",
-	"executeParamVm9":  "[concat(parameters('ElasticScriptCommandToExecute'), ' -xn ', variables('esSettings').clusterName, ' -v ', variables('esSettings').version, ' -d ', variables('esSettings').discoveryHosts)]",
+	  "executeParamVm2":  "[concat(parameters('customScriptCommandToExecute'), ' -m Q2 -s  NA -p  NA -t ACTIVEMQ')]",
+	  "executeParamVm3":  "[concat(parameters('customScriptCommandToExecute'), ' -m ESB -s  NA -p  NA -t ESB')]",
+	  "executeParamVm4":  "[concat(parameters('customScriptCommandToExecute'), ' -m CEP -s  NA -p  NA -t CEP')]",
+	  "executeParamVm5":  "[concat(parameters('customScriptCommandToExecute'), ' -m IS -s  NA -p  NA -t IS')]",
+	  "executeParamVm6":  "[concat(parameters('customScriptCommandToExecute'), ' -m Mysql -s  NA -p  ', parameters('mysqlPassword'),' -t MYSQL')]",
+	  "executeParamVm7":  "[concat(parameters('ElasticScriptCommandToExecute'), ' -xn ', variables('esSettings').clusterName, ' -v ', variables('esSettings').version, ' -d ', variables('esSettings').discoveryHosts)]",
+	  "executeParamVm8":  "[concat(parameters('ElasticScriptCommandToExecute'), ' -n ', variables('esSettings').clusterName, ' -v ', variables('esSettings').version, ' -d ', variables('esSettings').discoveryHosts)]",
+	  "executeParamVm9":  "[concat(parameters('ElasticScriptCommandToExecute'), ' -n ', variables('esSettings').clusterName, ' -v ', variables('esSettings').version, ' -d ', variables('esSettings').discoveryHosts)]",
     "vmExtensionName1": "[concat(parameters('vmName1'),'/', variables('vmExtensionName'))]",
     "vhdContainer2": "[concat('http://',parameters('storageAccount'),'.blob.core.windows.net/vm2vhds/')]",
     "dataDisk1VhdName2": "[concat(variables('vhdContainer2'),parameters('vmName2'),'dataDisk1.vhd')]",

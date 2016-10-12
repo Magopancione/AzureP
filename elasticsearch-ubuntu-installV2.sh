@@ -272,7 +272,11 @@ else
     log "setting up disks"
     
     #Format data disks (Find data disks then partition, format, and mount them as separate drives)
-    bash vm-disk-utils-0.1.sh    
+    #####bash vm-disk-utils-0.1.sh  
+    wget "https://raw.githubusercontent.com/Magopancione/AzureP/master/configureLVM.sh" -O configureLVM.sh
+    bash configureLVM.sh -datadisksluns 0,1
+}
+
 fi
 
 #Install Oracle Java
@@ -367,6 +371,8 @@ else
 fi
 
 echo "discovery.zen.minimum_master_nodes: 2" >> /etc/elasticsearch/elasticsearch.yml
+#Modifica Danny
+echo "bootstrap.mlockall: true" >> /etc/elasticsearch/elasticsearch.yml
 
 if [[ "${ES_VERSION}" == \2* ]]; then
     echo "network.host: _non_loopback_" >> /etc/elasticsearch/elasticsearch.yml
@@ -415,6 +421,11 @@ ES_HEAP=`free -m |grep Mem | awk '{if ($2/2 >31744)  print 31744;else print $2/2
 log "Configure elasticsearch heap size - $ES_HEAP"
 echo "ES_HEAP_SIZE=${ES_HEAP}m" >> /etc/default/elasticsearch
 
+
+#Danny Modifica
+echo "MAX_LOCKED_MEMORY=unlimited" >> /etc/default/elasticsearch
+echo "MAX_OPEN_FILES=131070" >> /etc/default/elasticsearch
+
 #Optionally Install Marvel
 if [ ${INSTALL_MARVEL} -ne 0 ]; then
     log "Installing Marvel Plugin"
@@ -439,6 +450,7 @@ if [ ${INSTALL_CLOUD_AZURE} -ne 0 ]; then
         echo "cloud.azure.storage.key: ${CLOUD_AZURE_KEY}" >> /etc/elasticsearch/elasticsearch.yml
     fi
 fi
+
 
 #Install Monit
 #TODO - Install Monit to monitor the process (Although load balancer probes can accomplish this)

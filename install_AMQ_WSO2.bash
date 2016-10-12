@@ -192,7 +192,7 @@ bash configureLVM.sh -optluns 0,1
 
 ######### Setup Disk OPT ###############
 setup_diskDB() {
-
+#vedi: https://azure.microsoft.com/it-it/documentation/articles/virtual-machines-linux-configure-lvm/
 #Disable Apparmor	
 /etc/init.d/apparmor teardown
 update-rc.d -f apparmor remove

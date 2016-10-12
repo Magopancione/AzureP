@@ -120,7 +120,8 @@ dbluns=""
 dbname="mysql-DB"
 optluns=""
 optname="opt"
-
+datadiskluns=""
+datadiskname="datadisk"
 while true; do
 	case "$1" in
     "-dbluns")  dbluns=$2;shift 2;
@@ -131,9 +132,18 @@ while true; do
         ;;
 	"-optname")  optname=$2;shift 2;
         ;;
+	"-datadiskluns")  datadiskluns=$2;shift 2;
+        ;;
+	"-datadiskname")  datadiskname=$2;shift 2;
+        ;;
     esac
 	if [[ -z "$1" ]]; then break; fi
 done
+
+if [[ -n "$datadiskluns" ]];
+then
+	createlvm $datadiskluns "vg-$datadiskname" "lv-$datadiskname" "/$datadiskname";
+fi
 
 if [[ -n "$dbluns" ]];
 then
