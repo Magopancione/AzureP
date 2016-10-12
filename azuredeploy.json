@@ -273,7 +273,7 @@
     },
     "probePort": {
       "type": "int",
-      "defaultValue": 22,
+      "defaultValue": 8161,
       "metadata": {
         "description": "cluster health check probe port exposed to load balancer"
       }
