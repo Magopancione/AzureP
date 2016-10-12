@@ -4,6 +4,8 @@ function log()
 	message=$1
 	echo "$message"
 	echo "$message" >> /var/log/lv-create
+	curl -X POST -H "content-type:text/plain" --data-binary "${HOSTNAME} - $message" https://logs-01.loggly.com/inputs/72e878ca-1b43-4fb5-87ea-f78b6f378840/tag/ES_SCRIPT,${HOSTNAME}
+   
 }
 
 function addtofstab()
@@ -127,7 +129,7 @@ while true; do
     "-dbluns")  dbluns=$2;shift 2;
         ;;
     "-optluns")  optluns=$2;shift 2;
-	        ;;
+	    ;;
 	"-dbname")  dbname=$2;shift 2;
         ;;
 	"-optname")  optname=$2;shift 2;
