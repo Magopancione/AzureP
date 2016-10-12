@@ -1,5 +1,16 @@
 #!/bin/bash
 
+
+
+
+mylog()
+{
+    # If you want to enable this logging add a un-comment the line below and add your account id
+    curl -X POST -H "content-type:text/plain" --data-binary "${HOSTNAME} - $1" https://logs-01.loggly.com/inputs/72e878ca-1b43-4fb5-87ea-f78b6f378840/tag/es-extension,${HOSTNAME}
+    logger "$1"
+}
+
+
 # You must be root to run this script
 if [ "${UID}" -ne 0 ];
 then
@@ -108,7 +119,7 @@ mysqlPassword=""
 
 #Loop through options passed
 while getopts :m:s:t:p: optname; do
-    logger "Option $optname set with value ${OPTARG}"
+    mylog "Option $optname set with value ${OPTARG}"
   case $optname in
     m)
       MASTERIP=${OPTARG}
@@ -136,12 +147,12 @@ done
 
 
 
-logger "NOW=$now MASTERIP=$MASTERIP SUBNETADDRESS=$SUBNETADDRESS NODETYPE=$NODETYPE"
+mylog "NOW=$now MASTERIP=$MASTERIP SUBNETADDRESS=$SUBNETADDRESS NODETYPE=$NODETYPE"
 
 ###### JAVA STEPS
 
 setup_java() {
-	logger "Start installing java..."
+	mylog "Start installing java..."
     cd /opt
     wget  $GET_JAVA_SITE -O $GET_JAVA_FILE
 	tar xvfz $GET_JAVA_FILE 
@@ -149,7 +160,7 @@ setup_java() {
     #The jvm directory is used to organize all JDK/JVM versions in a single parent directory.	
 	echo "export JAVA_HOME="/opt/java"" >> /etc/profile
     echo "export PATH="$PATH:$JAVA_HOME/bin"" >> /etc/profile
-    logger "Done installing Java, javahome is: $JAVA_TMP_PATH linked in /opt/java"	
+    mylog "Done installing Java, javahome is: $JAVA_TMP_PATH linked in /opt/java"	
 }
 
 
@@ -199,14 +210,14 @@ ls -s /mysql-DB /var/lib/mysql
 
 
 setup_activeMQ() {
-	logger "Start installing ActiveMQ..."
+	mylog "Start installing ActiveMQ..."
 	source  /etc/profile
     cd /opt
     wget  $GET_ACTIVEMQ_SITE -O $GET_ACTIVEMQ_FILE
 	tar xvfz $GET_ACTIVEMQ_FILE
     ln -s $ACTIVEMQ_TMP_PATH /opt/ActiveMQ
 
-	logger "Done installing ActiveMQ is installed in: $ACTIVEMQ_TMP_PATH  linked in /opt/ActiveMQ"	
+	mylog "Done installing ActiveMQ is installed in: $ACTIVEMQ_TMP_PATH  linked in /opt/ActiveMQ"	
 	
 	}
 	
@@ -230,7 +241,7 @@ GET_STATE=$( netstat -an|grep 61616| wc -l )
 
     if [ "$GET_STATE" == "1" ];
 	then
-	 logger " ------Done ActiveMQ is Running on port 61616 -------"   # per la cluster conviene usare puppet
+	 mylog " ------Done ActiveMQ is Running on port 61616 -------"   # per la cluster conviene usare puppet
 	fi
 #INFO  ActiveMQ JMS Message Broker (ID:apple-s-Computer.local-51222-1140729837569-0:0) has started
 
@@ -301,7 +312,7 @@ echo "net.ipv4.tcp_wmem = 4096 4096 16777216       " >> /etc/sysctl.conf
 ######   ESB STEPS
 
 setup_ESB() {
-	logger "Start installing Enterpris Service Bus..."
+	mylog "Start installing Enterpris Service Bus..."
 	BASE=/opt/WSO2/esb
 	apt-get install unzip -y
 	mkdir -p /opt/WSO2/
@@ -325,7 +336,7 @@ setup_ESB() {
 	groupadd -g 1010 $ESB_USER	
 	useradd -u 1010 -g 1010 $ESB_USER
 	chown -R  $ESB_USER:$ESB_USER $ESB_TMP_PATH 
-    logger "Done installing Enterpris Service Bus installed in: $ESB_TMP_PATH   linked in $BASE "	
+    mylog "Done installing Enterpris Service Bus installed in: $ESB_TMP_PATH   linked in $BASE "	
 	
 }
 
@@ -378,7 +389,7 @@ service esb_service start
 ######   CEP STEPS
 
 setup_CEP() {
-	logger " Start installing Complex Event Processor..."
+	mylog " Start installing Complex Event Processor..."
 	apt-get install unzip -y
 	BASE=/opt/WSO2/cep
 	mkdir -p /opt/WSO2/
@@ -404,7 +415,7 @@ setup_CEP() {
 
 
  
-    logger " Done installing WSO2 Complex Event Processor installed in: $CEP_TMP_PATH   linked in /opt/WSO2/cep"	
+    mylog " Done installing WSO2 Complex Event Processor installed in: $CEP_TMP_PATH   linked in /opt/WSO2/cep"	
 	
 }
 
@@ -470,7 +481,7 @@ service cep_service start
 ###### IS STEPS
 
 setup_IS() {
-	logger "Start installing java..."
+	mylog "Start installing java..."
 
 	apt-get install unzip -y
 	BASE=/opt/WSO2/IdentityServer
@@ -497,7 +508,7 @@ setup_IS() {
 	chown -R  $IS_USER:$IS_USER  $IS_TMP_PATH 
     
  
-    logger "Done installing Identiy Server installed in: $IS_TMP_PATH  linked in $BASE"
+    mylog "Done installing Identiy Server installed in: $IS_TMP_PATH  linked in $BASE"
 	
 }
 
@@ -651,17 +662,17 @@ service mysql restart
 #	# Move database files to the striped disk
 #	if [ -L /var/lib/kafkadir ];
 #	then
-#		logger "Symbolic link from /var/lib/kafkadir already exists"
+#		mylog "Symbolic link from /var/lib/kafkadir already exists"
 #		echo "Symbolic link from /var/lib/kafkadir already exists"
 #	else
-#		logger "Moving  data to the $MOUNTPOINT/kafkadir"
+#		mylog "Moving  data to the $MOUNTPOINT/kafkadir"
 #		echo "Moving PostgreSQL data to the $MOUNTPOINT/kafkadir"
 #		service postgresql stop
 #		mkdir $MOUNTPOINT/kafkadir
 #		mv -f /var/lib/kafkadir $MOUNTPOINT/kafkadir
 #
 #		# Create symbolic link so that configuration files continue to use the default folders
-#		logger "Create symbolic link from /var/lib/kafkadir to $MOUNTPOINT/kafkadir"
+#		mylog "Create symbolic link from /var/lib/kafkadir to $MOUNTPOINT/kafkadir"
 #		ln -s $MOUNTPOINT/kafkadir /var/lib/kafkadir
 #	fi
 #}
@@ -672,7 +683,7 @@ setup_product() {
 
 	if [ "$NODETYPE" == "ACTIVEMQ" ];
 	then
-	 logger " ------Start Install ActiveMQ------"
+	 mylog " ------Start Install ActiveMQ------"
 	 #Impostazione base di sistema
 	 setup_diskopt
      limits_activeMQ
@@ -684,7 +695,7 @@ setup_product() {
 	 post_install_activeMQ     
 	 #test of ActiveMQ
      test_activeMQ
-	logger " ------Done configuring ACTIVEMQ-------"
+	mylog " ------Done configuring ACTIVEMQ-------"
 	fi
 	
 	
@@ -697,7 +708,7 @@ setup_product() {
 	 limits_IS_CEP_ESB
 	 setup_IS
 	 post_install_IS
-	logger " ------Done configuring IS-------"
+	mylog " ------Done configuring IS-------"
 	fi
 	
 
@@ -711,7 +722,7 @@ setup_product() {
 	 limits_IS_CEP_ESB
 	 setup_CEP
 	 post_install_CEP
-	 logger " ------Done configuring CEP -------"   # per la cluster conviene usare puppet
+	 mylog " ------Done configuring CEP -------"   # per la cluster conviene usare puppet
 	fi
 	
 	
@@ -724,7 +735,7 @@ setup_product() {
 	 limits_IS_CEP_ESB
 	 setup_ESB
 	 post_install_ESB
-	logger " ------Done configuring ESB -------"
+	mylog " ------Done configuring ESB -------"
 	fi
 	
 
@@ -748,7 +759,7 @@ setup_product() {
          PASS3=$DBPASSIS
          crea_utenti_mysql
 	fi
-	logger " ------Done configuring CEP ------- "
+	mylog " ------Done configuring CEP ------- "
 
 }
 

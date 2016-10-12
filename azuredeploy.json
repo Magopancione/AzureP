@@ -403,13 +403,6 @@
       "metadata": {
         "description": "bash script command line for Elastic installation"
       }
-    },
-    "GiottoConfigFilePath": {
-      "type": "string",
-      "defaultValue": "https://raw.githubusercontent.com/Magopancione/AzureP/master/configureLVM.sh",
-      "metadata": {
-        "description": "my.cnf file location"
-      }
     }
   },
   "variables": {
@@ -432,7 +425,6 @@
     "ilbBackendAddressPoolName": "[concat(parameters('vmNamePrefix'), '-ilbBackendPool')]",
     "ilbBackendAddressPoolID": "[concat(variables('lbID'),'/backendAddressPools/', variables('ilbBackendAddressPoolName'))]",
     "ilbRuleName": "[concat(parameters('vmNamePrefix'), '-ilbRule')]",
-    "ilbRuleID": "[concat(variables('lbID'),'/loadBalancingRules/',variables('ilbRuleName'))]",
     "probeName": "[concat(parameters('vmNamePrefix'), '-probe')]",
     "probeID": "[concat(variables('lbID'),'/probes/',variables('probeName'))]",
     "sshIPConfigName": "[concat(parameters('vmNamePrefix'), '-sshIPCfg')]",
@@ -475,19 +467,8 @@
     "nicId7": "[resourceId('Microsoft.Network/networkInterfaces',variables('nicName7'))]",
     "nicId8": "[resourceId('Microsoft.Network/networkInterfaces',variables('nicName8'))]",
     "nicId9": "[resourceId('Microsoft.Network/networkInterfaces',variables('nicName9'))]",
-    "backEndIPConfigNic1": "[concat(variables('nicId1'),'/ipConfigurations/ipconfig1')]",
-    "backEndIPConfigNic2": "[concat(variables('nicId2'),'/ipConfigurations/ipconfig1')]",
-    "backEndIPConfigNic3": "[concat(variables('nicId3'),'/ipConfigurations/ipconfig1')]",
-    "backEndIPConfigNic4": "[concat(variables('nicId4'),'/ipConfigurations/ipconfig1')]",
-    "backEndIPConfigNic5": "[concat(variables('nicId5'),'/ipConfigurations/ipconfig1')]",
-    "backEndIPConfigNic6": "[concat(variables('nicId6'),'/ipConfigurations/ipconfig1')]",
-    "backEndIPConfigNic7": "[concat(variables('nicId7'),'/ipConfigurations/ipconfig1')]",
-    "backEndIPConfigNic8": "[concat(variables('nicId8'),'/ipConfigurations/ipconfig1')]",
-    "backEndIPConfigNic9": "[concat(variables('nicId9'),'/ipConfigurations/ipconfig1')]",
     "availabilitySetName": "[concat(parameters('vmNamePrefix'), '-set')]",
     "vmExtensionName": "[concat(parameters('vmNamePrefix'), '-ext')]",
-    "pxcClusterAddress": "[concat(parameters('vmIP1'), ',', parameters('vmIP2'), ',', parameters('vmIP3'),',', parameters('vmIP4'),',', parameters('vmIP5'),',', parameters('vmIP6'), ',', parameters('vmIP7'))]",
-    "customScriptCommandCommon": "[concat(parameters('customScriptCommandToExecute'), ' ', variables('pxcClusterAddress'), ' ')]",
     "vhdContainer1": "[concat('http://',parameters('storageAccount'),'.blob.core.windows.net/vm1vhds/')]",
     "dataDisk1VhdName1": "[concat(variables('vhdContainer1'),parameters('vmName1'),'dataDisk1.vhd')]",
     "dataDisk2VhdName1": "[concat(variables('vhdContainer1'),parameters('vmName1'),'dataDisk2.vhd')]",
@@ -500,40 +481,31 @@
 	"executeParamVm7":  "[concat(parameters('ElasticScriptCommandToExecute'), ' -xn ', variables('esSettings').clusterName, ' -v ', variables('esSettings').version, ' -d ', variables('esSettings').discoveryHosts)]",
 	"executeParamVm8":  "[concat(parameters('ElasticScriptCommandToExecute'), ' -xn ', variables('esSettings').clusterName, ' -v ', variables('esSettings').version, ' -d ', variables('esSettings').discoveryHosts)]",
 	"executeParamVm9":  "[concat(parameters('ElasticScriptCommandToExecute'), ' -xn ', variables('esSettings').clusterName, ' -v ', variables('esSettings').version, ' -d ', variables('esSettings').discoveryHosts)]",
-    "customScriptParamVm1": "[concat(parameters('vmIP1'), ' bootstrap-pxc ', parameters('GiottoConfigFilePath'))]",
     "vmExtensionName1": "[concat(parameters('vmName1'),'/', variables('vmExtensionName'))]",
     "vhdContainer2": "[concat('http://',parameters('storageAccount'),'.blob.core.windows.net/vm2vhds/')]",
     "dataDisk1VhdName2": "[concat(variables('vhdContainer2'),parameters('vmName2'),'dataDisk1.vhd')]",
     "dataDisk2VhdName2": "[concat(variables('vhdContainer2'),parameters('vmName2'),'dataDisk2.vhd')]",
-    "customScriptParamVm2": "[concat(parameters('vmIP2'), ' start ', parameters('GiottoConfigFilePath'))]",
     "vhdContainer3": "[concat('http://',parameters('storageAccount'),'.blob.core.windows.net/vm3vhds/')]",
     "dataDisk1VhdName3": "[concat(variables('vhdContainer3'),parameters('vmName3'),'dataDisk1.vhd')]",
     "dataDisk2VhdName3": "[concat(variables('vhdContainer3'),parameters('vmName3'),'dataDisk2.vhd')]",
-    "customScriptParamVm3": "[concat(parameters('vmIP3'), ' start ', parameters('GiottoConfigFilePath'))]",
     "vhdContainer4": "[concat('http://',parameters('storageAccount'),'.blob.core.windows.net/vm4vhds/')]",
     "dataDisk1VhdName4": "[concat(variables('vhdContainer4'),parameters('vmName4'),'dataDisk1.vhd')]",
     "dataDisk2VhdName4": "[concat(variables('vhdContainer4'),parameters('vmName4'),'dataDisk2.vhd')]",
-    "customScriptParamVm4": "[concat(parameters('vmIP4'), ' start ', parameters('GiottoConfigFilePath'))]",
     "vhdContainer5": "[concat('http://',parameters('storageAccount'),'.blob.core.windows.net/vm5vhds/')]",
     "dataDisk1VhdName5": "[concat(variables('vhdContainer5'),parameters('vmName5'),'dataDisk1.vhd')]",
     "dataDisk2VhdName5": "[concat(variables('vhdContainer5'),parameters('vmName5'),'dataDisk2.vhd')]",
-    "customScriptParamVm5": "[concat(parameters('vmIP5'), ' start ', parameters('GiottoConfigFilePath'))]",
     "vhdContainer6": "[concat('http://',parameters('storageAccount'),'.blob.core.windows.net/vm6vhds/')]",
     "dataDisk1VhdName6": "[concat(variables('vhdContainer6'),parameters('vmName6'),'dataDisk1.vhd')]",
     "dataDisk2VhdName6": "[concat(variables('vhdContainer6'),parameters('vmName6'),'dataDisk2.vhd')]",
-    "customScriptParamVm6": "[concat(parameters('vmIP6'), ' start ', parameters('GiottoConfigFilePath'))]",
     "vhdContainer7": "[concat('http://',parameters('storageAccount'),'.blob.core.windows.net/vm7vhds/')]",
     "dataDisk1VhdName7": "[concat(variables('vhdContainer7'),parameters('vmName7'),'dataDisk1.vhd')]",
     "dataDisk2VhdName7": "[concat(variables('vhdContainer7'),parameters('vmName7'),'dataDisk2.vhd')]",
-    "customScriptParamVm7": "[concat(parameters('vmIP7'), ' start ', parameters('GiottoConfigFilePath'))]",
     "vhdContainer8": "[concat('http://',parameters('storageAccount'),'.blob.core.windows.net/vm8vhds/')]",
     "dataDisk1VhdName8": "[concat(variables('vhdContainer8'),parameters('vmName8'),'dataDisk1.vhd')]",
     "dataDisk2VhdName8": "[concat(variables('vhdContainer8'),parameters('vmName8'),'dataDisk2.vhd')]",
-    "customScriptParamVm8": "[concat(parameters('vmIP8'), ' start ', parameters('GiottoConfigFilePath'))]",
     "vhdContainer9": "[concat('http://',parameters('storageAccount'),'.blob.core.windows.net/vm9vhds/')]",
     "dataDisk1VhdName9": "[concat(variables('vhdContainer9'),parameters('vmName9'),'dataDisk1.vhd')]",
-    "dataDisk2VhdName9": "[concat(variables('vhdContainer9'),parameters('vmName9'),'dataDisk2.vhd')]",
-    "customScriptParamVm9": "[concat(parameters('vmIP9'), ' start ', parameters('GiottoConfigFilePath'))]"
+    "dataDisk2VhdName9": "[concat(variables('vhdContainer9'),parameters('vmName9'),'dataDisk2.vhd')]"
   },
   "resources": [
     {
