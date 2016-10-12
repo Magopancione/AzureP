@@ -75,7 +75,7 @@
       "value": "10.0.2.22"
     },    
     "DiskDataGB": {
-      "value": 10
+      "value": 1
     },
     "userName": {
       "value": "azureuser"

@@ -8,38 +8,6 @@
         "description": "Storage account name for the cluster"
       }
     },
-    "loadBalancerType": {
-      "type": "string",
-      "defaultValue": "internal",
-      "allowedValues": [
-        "internal",
-        "external"
-      ],
-      "metadata": {
-        "description": "Setup the load balancer internal or external.  If you are setting up Elasticsearch on an external endpoint you will need to secure your nodes with a product like Elasticsearch Shield"
-      }
-    },
-    "vmClientNodeCount": {
-      "type": "int",
-      "defaultValue": 1,
-      "allowedValues": [
-        0,
-        1,
-        2,
-        3,
-        4
-      ],
-      "metadata": {
-        "description": "Number of Elasticsearch client nodes to provision (Setting this to zero puts the data nodes on the load balancer)"
-      }
-    },
-      "vmDataNodeCount": {
-      "type": "int",
-      "defaultValue": 3,
-      "metadata": {
-        "description": "Number of Elasticsearch data nodes"
-      }
-    },
     "esClusterName": {
       "type": "string",
       "defaultValue": "elasticsearch",
@@ -312,7 +280,7 @@
     },
     "DiskDataGB": {
       "type": "int",
-      "defaultValue": 10,
+      "defaultValue": 1,
       "metadata": {
         "description": "Size of data disk in GB"
       }
@@ -417,7 +385,7 @@
     },
    "ElasticScriptFilePath": {
       "type": "string",
-      "defaultValue": "https://raw.githubusercontent.com/Magopancione/AzureP/master/elasticsearch-ubuntu-install.sh",
+      "defaultValue": "https://raw.githubusercontent.com/Magopancione/AzureP/master/elasticsearch-ubuntu-installV2.sh",
       "metadata": {
         "description": "bash file location to configure the cluster for Elastic installation"
       }
@@ -529,9 +497,9 @@
 	"executeParamVm4":  "[concat(parameters('customScriptCommandToExecute'), ' -m CEP -s  NA -p  NA -t CEP')]",
 	"executeParamVm5":  "[concat(parameters('customScriptCommandToExecute'), ' -m IS -s  NA -p  NA -t IS')]",
 	"executeParamVm6":  "[concat(parameters('customScriptCommandToExecute'), ' -m Mysql -s  NA -p  ', parameters('mysqlPassword'),' -t MYSQL')]",
-	"executeParamVm7":  "[concat(parameters('ElasticScriptCommandToExecute'), ' -xn clusterMaster -v 2.3.1  -d 10.0.2.2-3')]",
-	"executeParamVm8":  "[concat(parameters('ElasticScriptCommandToExecute'), ' -yn clusterMaster -v 2.3.1  -d 10.0.2.2-3')]",
-	"executeParamVm9":  "[concat(parameters('ElasticScriptCommandToExecute'), ' -zn clusterMaster -v 2.3.1  -d 10.0.2.2-3')]",
+	"executeParamVm7":  "[concat(parameters('ElasticScriptCommandToExecute'), ' -xn ', variables('esSettings').clusterName, ' -v ', variables('esSettings').version, ' -d ', variables('esSettings').discoveryHosts)]",
+	"executeParamVm8":  "[concat(parameters('ElasticScriptCommandToExecute'), ' -xn ', variables('esSettings').clusterName, ' -v ', variables('esSettings').version, ' -d ', variables('esSettings').discoveryHosts)]",
+	"executeParamVm9":  "[concat(parameters('ElasticScriptCommandToExecute'), ' -xn ', variables('esSettings').clusterName, ' -v ', variables('esSettings').version, ' -d ', variables('esSettings').discoveryHosts)]",
     "customScriptParamVm1": "[concat(parameters('vmIP1'), ' bootstrap-pxc ', parameters('GiottoConfigFilePath'))]",
     "vmExtensionName1": "[concat(parameters('vmName1'),'/', variables('vmExtensionName'))]",
     "vhdContainer2": "[concat('http://',parameters('storageAccount'),'.blob.core.windows.net/vm2vhds/')]",
