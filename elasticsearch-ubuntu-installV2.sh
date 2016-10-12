@@ -275,13 +275,22 @@ else
     #####bash vm-disk-utils-0.1.sh  
     wget "https://raw.githubusercontent.com/Magopancione/AzureP/master/configureLVM.sh" -O configureLVM.sh
     bash configureLVM.sh -datadisksluns 0,1
-}
 
 fi
 
 #Install Oracle Java
 #------------------------
 install_java
+
+
+#add Danny
+#if [ $(which java) ];
+#   then  
+#   dpkg -remove 
+#install_java
+#fi
+
+
 
 #
 #Install Elasticsearch

@@ -252,7 +252,7 @@
     },
     "appFrontEndPort": {
       "type": "int",
-      "defaultValue": 443,
+      "defaultValue": 80,
       "metadata": {
         "description": "APP public port"
       }
@@ -308,7 +308,7 @@
     },
     "sshNatRuleFrontEndPort1": {
       "type": "int",
-      "defaultValue": 80,
+      "defaultValue": 443,
       "metadata": {
         "description": "public ssh port for VM1"
       }
