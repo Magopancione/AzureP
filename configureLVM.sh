@@ -123,18 +123,18 @@ dbname="mysql-DB"
 optluns=""
 optname="opt"
 datadiskluns=""
-datadiskname="datadisk"
+datadiskname="datadisks"
 while true; do
 	case "$1" in
     "-dbluns")  dbluns=$2;shift 2;
         ;;
     "-optluns")  optluns=$2;shift 2;
 	    ;;
+	"-datadiskluns")  datadiskluns=$2;shift 2;
+        ;;
 	"-dbname")  dbname=$2;shift 2;
         ;;
 	"-optname")  optname=$2;shift 2;
-        ;;
-	"-datadiskluns")  datadiskluns=$2;shift 2;
         ;;
 	"-datadiskname")  datadiskname=$2;shift 2;
         ;;

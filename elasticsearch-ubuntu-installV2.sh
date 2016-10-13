@@ -274,22 +274,25 @@ else
     #Format data disks (Find data disks then partition, format, and mount them as separate drives)
     #####bash vm-disk-utils-0.1.sh  
     wget "https://raw.githubusercontent.com/Magopancione/AzureP/master/configureLVM.sh" -O configureLVM.sh
-    bash configureLVM.sh -datadisksluns 0,1
+    bash configureLVM.sh -datadiskluns 0,1
 
 fi
 
 #Install Oracle Java
 #------------------------
-install_java
-
+#install_java
 
 #add Danny
-#if [ $(which java) ];
-#   then  
-#   dpkg -remove 
-#install_java
-#fi
-
+tmp=$(which java)
+while [ -z $tmp ]
+do
+	dpkg --list oracle-java8-installer
+	dpkg --remove java-common oracle-java8-installer
+	dpkg --purge --force-all oracle-java8-installer  java-common
+	dpkg --list oracle-java8-installer
+	install_java
+	tmp=$(which java)
+done
 
 
 #
