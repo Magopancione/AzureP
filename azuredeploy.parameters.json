@@ -57,19 +57,19 @@
       "value": "10.0.2.10"
     },
     "vmName7": {
-      "value": "Elastic-Master"
+      "value": "ElM01"
     },
     "vmIP7": {
       "value": "10.0.2.20"
     },  
    "vmName8": {
-      "value": "Elastic-Client"
+      "value": "ELM02-D"
     },
     "vmIP8": {
       "value": "10.0.2.21"
     },  
     "vmName9": {
-      "value": "Elastic-Data"
+      "value": "ELM03-D"
     },
     "vmIP9": {
       "value": "10.0.2.22"
@@ -84,7 +84,7 @@
       "value": "Almaviva1"
     },
     "vmNamePrefix": {
-      "value": "giotto"
+      "value": "GG"
     }
   }
 }

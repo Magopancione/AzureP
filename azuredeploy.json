@@ -420,10 +420,14 @@
     "dbSubnetRef": "[concat(variables('vnetID'),'/subnets/',parameters('dbSubnetName'))]",
     "lbPublicIPName": "[concat(variables('lbName'), '-publicIP')]",
     "lbPublicIPRef": "[resourceId('Microsoft.Network/publicIPAddresses',variables('lbPublicIPName'))]",
-    "lbName": "[concat(parameters('vmNamePrefix'), '-lb')]",
+    "lbName": "[concat(parameters('vmNamePrefix'), '-lb_exeternal')]",
+    "lbName2": "[concat(parameters('vmNamePrefix'), '-lb_internal')]",
     "lbID": "[resourceId('Microsoft.Network/loadBalancers',variables('lbName'))]",
+    "lbID2": "[resourceId('Microsoft.Network/loadBalancers',variables('lbName2'))]",
+    "ilbBackendAddressPoolName2": "[concat(parameters('vmNamePrefix'), '-ilbBackendPool2')]",
     "ilbBackendAddressPoolName": "[concat(parameters('vmNamePrefix'), '-ilbBackendPool')]",
     "ilbBackendAddressPoolID": "[concat(variables('lbID'),'/backendAddressPools/', variables('ilbBackendAddressPoolName'))]",
+    "ilbBackendAddressPoolID2": "[concat(variables('lbID2'),'/backendAddressPools/', variables('ilbBackendAddressPoolName2'))]",
     "ilbRuleName": "[concat(parameters('vmNamePrefix'), '-ilbRule')]",
     "probeName": "[concat(parameters('vmNamePrefix'), '-probe')]",
     "probeID": "[concat(variables('lbID'),'/probes/',variables('probeName'))]",
@@ -1652,6 +1656,48 @@
                   "commandToExecute": "[variables('executeParamVm9')]"
         }
       }
+    },
+        {
+      "type": "Microsoft.Network/loadBalancers",
+         "name": "[variables('lbName2')]",
+      "apiVersion": "2016-03-30",
+      "location": "[resourceGroup().location]",
+      "properties": {
+        "frontendIPConfigurations": [
+          {
+            "name": "LoadBalancerFrontEnd",
+            "properties": {
+              "privateIPAddress": "10.0.1.50",
+              "privateIPAllocationMethod": "Static",
+              "subnet": {
+                "id": "[variables('feSubnetRef')]"
+              }
+            }
+          }
+        ],
+        "backendAddressPools": [
+          {
+            "name": "[variables('ilbBackendAddressPoolName2')]"
+          }
+        ],
+        "loadBalancingRules": [],
+                "probes": [
+          {
+            "name": "[variables('probeName')]",
+            "properties": {
+              "protocol": "Http",
+              "port": "[parameters('probePort')]",
+              "intervalInSeconds": "[parameters('probeIntervalInSeconds')]",
+              "numberOfProbes": "[parameters('numberOfProbes')]",
+              "requestPath": "[parameters('probeRequestPath')]"
+            }
+          }
+        ],
+        "inboundNatRules": [],
+        "outboundNatRules": [],
+        "inboundNatPools": []
+      },
+      "resources": []
     },
     {
       "apiVersion": "2015-06-15",
