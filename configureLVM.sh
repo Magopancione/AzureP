@@ -150,6 +150,9 @@ fi
 if [[ -n "$dbluns" ]];
 then
 	createlvm $dbluns "vg-$dbname" "lv-$dbname" "/$dbname";
+	umount /$dbname
+	sed -e "s/$dbname/var/lib/mysql\//g"  -i /etc/fstab
+    mount -a 
 fi
 
 if [[ -n "$optluns" ]];
