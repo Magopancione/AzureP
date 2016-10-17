@@ -117,6 +117,8 @@ function createlvm()
 apt-get install -y xfsprogs lvm2 lsscsi
 #bash configureLVM.sh -dbluns 0,1
 #bash configureLVM.sh -optluns 0,1
+#montato su opportuno mount point
+db_new="\/var\/lib\/mysql"
 
 dbluns=""
 dbname="mysql-DB"
@@ -149,10 +151,11 @@ fi
 
 if [[ -n "$dbluns" ]];
 then
-	createlvm $dbluns "vg-$dbname" "lv-$dbname" "/$dbname";
-	umount /$dbname
-	sed -e "s/$dbname/var/lib/mysql\//g"  -i /etc/fstab
-    mount -a 
+	createlvm $dbluns "vg-$dbname" "lv-$dbname" "/$dbname"
+        umount /$dbname
+        sed -e "s/$dbname/$db_new/g"  -i /etc/fstab
+    mount -a
+
 fi
 
 if [[ -n "$optluns" ]];

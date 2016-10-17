@@ -167,7 +167,8 @@ done
 # Base path for data disk mount points
 # The script assume format /datadisks/disk1 /datadisks/disk2
 DATA_BASE="/datadisks"
-
+mkdir -p /datadisks/disk1
+mkdir -p /datadisks/disk2
 # Expand a list of successive ip range and filter my local local ip from the list
 # Ip list is represented as a prefix and that is appended with a zero to N index
 # 10.0.0.1-3 would be converted to "10.0.0.10 10.0.0.11 10.0.0.12"

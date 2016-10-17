@@ -278,13 +278,6 @@
         "description": "cluster health check probe port exposed to load balancer"
       }
     },
-    "probePort2": {
-      "type": "int",
-      "defaultValue": 9200,
-      "metadata": {
-        "description": "cluster health check probe port exposed to load balancer"
-      }
-    },
     "DiskDataGB": {
       "type": "int",
       "defaultValue": 1,
@@ -437,7 +430,6 @@
     "ilbBackendAddressPoolID2": "[concat(variables('lbID2'),'/backendAddressPools/', variables('ilbBackendAddressPoolName2'))]",
     "ilbRuleName": "[concat(parameters('vmNamePrefix'), '-ilbRule')]",
     "probeName": "[concat(parameters('vmNamePrefix'), '-probe')]",
-    "probeName2": "[concat(parameters('vmNamePrefix'), 'internal-probe')]",
     "probeID": "[concat(variables('lbID'),'/probes/',variables('probeName'))]",
     "sshIPConfigName": "[concat(parameters('vmNamePrefix'), '-sshIPCfg')]",
     "sshIPConfig": "[concat(variables('lbID'),'/frontendIPConfigurations/',variables('sshIPConfigName'))]",
@@ -1688,31 +1680,25 @@
             "name": "[variables('ilbBackendAddressPoolName2')]"
           }
         ],
-        
         "loadBalancingRules": [],
                 "probes": [
-              {
-            "name": "[variables('probeName2')]",
+          {
+            "name": "[variables('probeName')]",
             "properties": {
-              "protocol": "Tcp",
-              "port": "[parameters('probePort2')]",
+              "protocol": "Http",
+              "port": "[parameters('probePort')]",
               "intervalInSeconds": "[parameters('probeIntervalInSeconds')]",
               "numberOfProbes": "[parameters('numberOfProbes')]",
               "requestPath": "[parameters('probeRequestPath')]"
             }
           }
         ],
-
         "inboundNatRules": [],
         "outboundNatRules": [],
         "inboundNatPools": []
       },
       "resources": []
     },
-
-
-
-
     {
       "apiVersion": "2015-06-15",
       "type": "Microsoft.Network/loadBalancers",
