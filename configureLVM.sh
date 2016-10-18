@@ -119,7 +119,6 @@ apt-get install -y xfsprogs lvm2 lsscsi
 #bash configureLVM.sh -optluns 0,1
 #montato su opportuno mount point
 db_new="\/var\/lib\/mysql"
-
 dbluns=""
 dbname="mysql-DB"
 optluns=""
@@ -153,6 +152,7 @@ if [[ -n "$dbluns" ]];
 then
 	createlvm $dbluns "vg-$dbname" "lv-$dbname" "/$dbname"
         umount /$dbname
+		mkdir -p /var/lib/mysql
         sed -e "s/$dbname/$db_new/g"  -i /etc/fstab
     mount -a
 
